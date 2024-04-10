@@ -34,6 +34,7 @@ import { QuestionInput } from "../../components/QuestionInput";
 import { ChatHistoryPanel } from "../../components/ChatHistory/ChatHistoryPanel";
 import { AppStateContext } from "../../state/AppProvider";
 import { useBoolean } from "@fluentui/react-hooks";
+import { Disclaimer } from "../../components/common/Disclaimer";
 
 const enum messageStatus {
     NotRunning = "Not Running",
@@ -57,6 +58,7 @@ const Chat = () => {
     const [clearingChat, setClearingChat] = useState<boolean>(false);
     const [hideErrorDialog, { toggle: toggleErrorDialog }] = useBoolean(true);
     const [errorMsg, setErrorMsg] = useState<ErrorMessage | null>()
+    const [showDisclaimer, { toggle: toggleDisclaimer }] = useBoolean(true);
 
     const errorDialogContentProps = {
         type: DialogType.close,
@@ -693,7 +695,17 @@ const Chat = () => {
                                 <div ref={chatMessageStreamEnd} />
                             </div>
                         )}
-
+                        <Stack.Item>
+                            {showDisclaimer && (
+                                <Disclaimer
+                                    onDismiss={toggleDisclaimer}
+                                    text={
+                                    "This is a preview - AI generated results may be inaccurate."
+                                    }
+                                />
+                            )}
+                        </Stack.Item>
+                                    
                         <Stack horizontal className={styles.chatInput}>
                             {isLoading && (
                                 <Stack
