@@ -27,6 +27,8 @@ bp = Blueprint("routes", __name__, static_folder="static", template_folder="stat
 # Current minimum Azure OpenAI version supported
 MINIMUM_SUPPORTED_AZURE_OPENAI_PREVIEW_API_VERSION="2024-02-15-preview"
 
+load_dotenv()
+
 # UI configuration (optional)
 UI_TITLE = os.environ.get("UI_TITLE") or "Mixed Reality Compliance Copilot"
 UI_LOGO = os.environ.get("UI_LOGO") or "/assets/MRLogo.png"
@@ -55,7 +57,7 @@ async def favicon():
 async def assets(path):
     return await send_from_directory("static/assets", path)
 
-load_dotenv()
+
 
 # Debug settings
 DEBUG = os.environ.get("DEBUG", "false")
