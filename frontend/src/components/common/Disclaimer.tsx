@@ -1,9 +1,9 @@
 import { MessageBar, MessageBarType, IMessageBarProps } from "@fluentui/react";
 
-interface DisclaimerProps extends IMessageBarProps {
+interface IDisclaimerProps extends IMessageBarProps {
   text: string | undefined;
 }
-export const Disclaimer: React.FC<DisclaimerProps> = (p: DisclaimerProps) => {
+export const Disclaimer: React.FC<IDisclaimerProps> = (p: IDisclaimerProps) => {
   return (
     <MessageBar
       messageBarType={MessageBarType.warning}
