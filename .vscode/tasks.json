@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run backend",
+            "type": "shell",
+            "command": "echo 'Running backend...'",
+            "dependsOn": "wait for frontend",
+            "problemMatcher": []
+        },
+        {
+            "label": "wait for frontend",
+            "type": "shell",
+            "command": "echo 'Waiting for frontend to finish installing and building...'",
+            "problemMatcher": []
+        }
+    ]
+}

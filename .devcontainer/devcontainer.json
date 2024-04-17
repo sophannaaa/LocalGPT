@@ -14,7 +14,8 @@
             "extensions": [
                 "ms-azuretools.azure-dev",
                 "ms-azuretools.vscode-bicep",
-                "ms-python.python"
+                "ms-python.python",
+                "VisualStudioExptTeam.vscodeintellicode"
             ]
         },
         "codespaces": {
@@ -29,5 +30,6 @@
     "remoteUser": "vscode",
     "hostRequirements": {
         "memory": "8gb"
-    }
+    },
+    "postCreateCommand": "pip3 install --user -r requirements-dev.txt"
 }

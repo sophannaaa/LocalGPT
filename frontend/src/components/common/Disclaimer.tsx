@@ -1,13 +1,16 @@
-import { MessageBar, MessageBarType, IMessageBarProps } from "@fluentui/react";
+import { MessageBar, MessageBarType, IMessageBarProps, IStyleFunctionOrObject } from "@fluentui/react";
 
 interface IDisclaimerProps extends IMessageBarProps {
+  onDismiss: () => void;
   text: string | undefined;
+  className?: string;
+
 }
 export const Disclaimer: React.FC<IDisclaimerProps> = (p: IDisclaimerProps) => {
   return (
     <MessageBar
+      className={p.className}
       messageBarType={MessageBarType.warning}
-      isMultiline={false}
       onDismiss={p.onDismiss}
       dismissButtonAriaLabel="Close"
     >

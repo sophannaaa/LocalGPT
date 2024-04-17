@@ -2,24 +2,77 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Sample App Backend",
-      "type": "python",
+      "name": "Frontend Install and Build",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "install-and-run"
+      ],
+      "env": {
+        "BROWSER": "none"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "cwd": "${workspaceFolder}/frontend",
+      "postDebugTask": "run backend"
+    },
+    {
+      "name": "Frontend Install",
+      "request": "launch",
+      "runtimeArgs": [
+        "install",
+      ],
+      "cwd": "${workspaceFolder}/frontend",
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "name": "Frontend Build",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "build"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/frontend"
+    },
+    {
+      "name": "Backend Debug",
+      "type": "debugpy",
       "request": "launch",
       "module": "quart",
       "cwd": "${workspaceFolder}",
       "env": {
-          "QUART_APP": "app:app",
-          "QUART_ENV": "development",
-          "QUART_DEBUG": "0"
+        "QUART_APP": "app:app",
+        "QUART_ENV": "development",
+        "QUART_DEBUG": "1"
       },
       "args": [
-          "run",
-          "--no-reload",
-          "-p 50505"
+        "run",
+        // "--no-reload",
+        "-p 50505"
       ],
       "console": "integratedTerminal",
       "justMyCode": false,
       "envFile": "${workspaceFolder}/.env",
-  }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Run Frontend and Backend",
+      "configurations": [
+        "Frontend Install and Build",
+        "Backend Debug"
+      ]
+    }
   ]
 }
