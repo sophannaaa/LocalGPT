@@ -52,13 +52,15 @@ const Chat = () => {
     const [activeCitation, setActiveCitation] = useState<Citation>();
     const [isCitationPanelOpen, setIsCitationPanelOpen] = useState<boolean>(false);
     const abortFuncs = useRef([] as AbortController[]);
-    const [showAuthMessage, setShowAuthMessage] = useState<boolean>(true);
-    const [messages, setMessages] = useState<ChatMessage[]>([])
+    const [showAuthMessage, setShowAuthMessage] = useState<boolean | undefined>();
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [processMessages, setProcessMessages] = useState<messageStatus>(messageStatus.NotRunning);
     const [clearingChat, setClearingChat] = useState<boolean>(false);
     const [hideErrorDialog, { toggle: toggleErrorDialog }] = useBoolean(true);
-    const [errorMsg, setErrorMsg] = useState<ErrorMessage | null>()
-    const [showDisclaimer, { toggle: toggleDisclaimer }] = useBoolean(true);
+    const [errorMsg, setErrorMsg] = useState<ErrorMessage | null>();
+    const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true);
+    const [userName, setUserName] = useState<string>("User_ID");
+    const [chatTitle, setChatTitle] = useState<string>("Hi!");
 
     const errorDialogContentProps = {
         type: DialogType.close,
@@ -90,6 +92,10 @@ const Chat = () => {
         }
     }, [appStateContext?.state.isCosmosDBAvailable]);
 
+    const handleDisclaimerClose = () => {
+        setShowDisclaimer(false);
+    }
+
     const handleErrorDialogClose = () => {
         toggleErrorDialog()
         setTimeout(() => {
@@ -103,6 +109,8 @@ const Chat = () => {
 
     const getUserInfoList = async () => {
         if (!AUTH_ENABLED) {
+            setUserName("User");
+            setChatTitle(ui?.chat_title + ' ' + userName + '!');
             setShowAuthMessage(false);
             return;
         }
@@ -111,6 +119,8 @@ const Chat = () => {
             setShowAuthMessage(true);
         }
         else {
+            setUserName(userInfoList[0].user_claims.find((e: { typ: string; }) => e.typ === 'name').val);
+            setChatTitle(ui?.chat_title  + ' ' + userName + '!');
             setShowAuthMessage(false);
         }
     }
@@ -151,6 +161,7 @@ const Chat = () => {
     const makeApiRequestWithoutCosmosDB = async (question: string, conversationId?: string) => {
         setIsLoading(true);
         setShowLoadingMessage(true);
+        handleDisclaimerClose();
         const abortController = new AbortController();
         abortFuncs.current.unshift(abortController);
 
@@ -275,6 +286,7 @@ const Chat = () => {
     const makeApiRequestWithCosmosDB = async (question: string, conversationId?: string) => {
         setIsLoading(true);
         setShowLoadingMessage(true);
+        handleDisclaimerClose();
         const abortController = new AbortController();
         abortFuncs.current.unshift(abortController);
 
@@ -495,6 +507,7 @@ const Chat = () => {
     }
 
     const clearChat = async () => {
+        setShowDisclaimer(true)
         setClearingChat(true)
         if (appStateContext?.state.currentChat?.id && appStateContext?.state.isCosmosDBAvailable.cosmosDB) {
             let response = await historyClear(appStateContext?.state.currentChat.id)
@@ -516,6 +529,7 @@ const Chat = () => {
     };
 
     const newChat = () => {
+        setShowDisclaimer(true);
         setProcessMessages(messageStatus.Processing)
         setMessages([])
         setIsCitationPanelOpen(false);
@@ -647,7 +661,7 @@ const Chat = () => {
                                     className={styles.chatIcon}
                                     aria-hidden="true"
                                 />
-                                <h1 className={styles.chatEmptyStateTitle}>{ui?.chat_title}</h1>
+                                <h1 className={styles.chatEmptyStateTitle}>{chatTitle}</h1>
                                 <h2 className={styles.chatEmptyStateSubtitle}>{ui?.chat_description}</h2>
                             </Stack>
                         ) : (
@@ -695,16 +709,17 @@ const Chat = () => {
                                 <div ref={chatMessageStreamEnd} />
                             </div>
                         )}
-                        <Stack.Item>
+                        <Stack className={styles.disclaimerContainerRoot}>
                             {showDisclaimer && (
                                 <Disclaimer
-                                    onDismiss={toggleDisclaimer}
+                                    className={styles.disclaimerContainer}
+                                    onDismiss={handleDisclaimerClose}
                                     text={
-                                    "This is a preview - AI generated results may be inaccurate."
+                                    "This Copilot currently provided information on Mixed Reality Security and Compliance. This is currently a preview - AI generated responses may be inaccurate."
                                     }
                                 />
                             )}
-                        </Stack.Item>
+                        </Stack>
                                     
                         <Stack horizontal className={styles.chatInput}>
                             {isLoading && (

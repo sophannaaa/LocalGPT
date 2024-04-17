@@ -130,6 +130,16 @@
     align-items: center;
 }
 
+.disclaimerContainerRoot {
+    width: calc(100% - 100px);
+    max-width: 1028px;
+}
+
+.disclaimerContainer {
+    width: auto;
+    margin-left: 6.5%;
+}
+
 .chatInput {
     position: sticky;
     flex: 0 0 100px;
