@@ -20,7 +20,14 @@ export async function getUserInfo(): Promise<UserInfo[]> {
     const response = await fetch('/.auth/me');
     if (!response.ok) {
         console.log("No identity provider found. Access to chat will be blocked.")
-        return [];
+        return [{
+            access_token: "",
+            expires_on: "",
+            id_token: "",
+            provider_name: "",
+            user_claims: [{"typ": "name", "val": "User"}],
+            user_id: "",
+        }];
     }
 
     const payload = await response.json();

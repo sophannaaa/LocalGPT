@@ -33,7 +33,7 @@ load_dotenv()
 UI_TITLE = os.environ.get("UI_TITLE") or "Mixed Reality Compliance Copilot"
 UI_LOGO = os.environ.get("UI_LOGO") or "/assets/MRLogo.png"
 UI_CHAT_LOGO = os.environ.get("UI_CHAT_LOGO") or "/assets/MRLogo.png"
-UI_CHAT_TITLE = os.environ.get("UI_CHAT_TITLE") or "Hi There!"
+UI_CHAT_TITLE = os.environ.get("UI_CHAT_TITLE") or "Hi"
 UI_CHAT_DESCRIPTION = os.environ.get("UI_CHAT_DESCRIPTION") or "I'm here to answer your questions regarding Mixed Reality"
 UI_FAVICON = os.environ.get("UI_FAVICON") or "/assets/MRLogo.png"
 UI_SHOW_SHARE_BUTTON = os.environ.get("UI_SHOW_SHARE_BUTTON", "true").lower() == "false"
