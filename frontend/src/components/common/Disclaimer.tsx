@@ -1,4 +1,4 @@
-import { MessageBar, MessageBarType, IMessageBarProps, IStyleFunctionOrObject } from "@fluentui/react";
+import { MessageBar, MessageBarType, IMessageBarProps } from "@fluentui/react";
 
 interface IDisclaimerProps extends IMessageBarProps {
   onDismiss: () => void;

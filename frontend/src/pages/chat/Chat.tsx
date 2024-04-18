@@ -10,7 +10,7 @@ import { isEmpty } from "lodash-es";
 import DOMPurify from 'dompurify';
 
 import styles from "./Chat.module.css";
-import Contoso from "../../assets/Contoso.svg";
+import MR from "../../assets/MR.svg";
 import { XSSAllowTags } from "../../constants/xssAllowTags";
 
 import {
@@ -60,7 +60,7 @@ const Chat = () => {
     const [errorMsg, setErrorMsg] = useState<ErrorMessage | null>();
     const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true);
     const [userName, setUserName] = useState<string>("User_ID");
-    const [chatTitle, setChatTitle] = useState<string>("Hi!");
+    const [chatTitle, setChatTitle] = useState<string>("Hi");
 
     const errorDialogContentProps = {
         type: DialogType.close,
@@ -119,7 +119,8 @@ const Chat = () => {
             setShowAuthMessage(true);
         }
         else {
-            setUserName(userInfoList[0].user_claims.find((e: { typ: string; }) => e.typ === 'name').val);
+            const username = userInfoList[0]?.user_claims?.find((e: { typ: string; }) => e.typ === 'name')?.val
+            setUserName(username);
             setChatTitle(ui?.chat_title  + ' ' + userName + '!');
             setShowAuthMessage(false);
         }
@@ -604,7 +605,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (AUTH_ENABLED !== undefined) getUserInfoList();
-    }, [AUTH_ENABLED]);
+    }, [AUTH_ENABLED, chatTitle, userName]);
 
     useLayoutEffect(() => {
         chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" })
@@ -657,7 +658,7 @@ const Chat = () => {
                         {!messages || messages.length < 1 ? (
                             <Stack className={styles.chatEmptyState}>
                                 <img
-                                    src={ui?.chat_logo ? ui.chat_logo : Contoso}
+                                    src={ui?.chat_logo ? ui.chat_logo : MR}
                                     className={styles.chatIcon}
                                     aria-hidden="true"
                                 />
@@ -715,7 +716,7 @@ const Chat = () => {
                                     className={styles.disclaimerContainer}
                                     onDismiss={handleDisclaimerClose}
                                     text={
-                                    "This Copilot currently provided information on Mixed Reality Security and Compliance. This is currently a preview - AI generated responses may be inaccurate."
+                                    "This Copilot currently provides information on Mixed Reality Security and Compliance. This is currently a preview - AI generated responses may be inaccurate."
                                     }
                                 />
                             )}
