@@ -42,8 +42,8 @@ export const Answer = ({
     const [showReportInappropriateFeedback, setShowReportInappropriateFeedback] = useState(false);
     const [negativeFeedbackList, setNegativeFeedbackList] = useState<Feedback[]>([]);
     const appStateContext = useContext(AppStateContext)
-    const FEEDBACK_ENABLED = appStateContext?.state.frontendSettings?.feedback_enabled && appStateContext?.state.isCosmosDBAvailable?.cosmosDB; 
-    const SANITIZE_ANSWER = appStateContext?.state.frontendSettings?.sanitize_answer 
+    const FEEDBACK_ENABLED = true //appStateContext?.state.frontendSettings?.feedback_enabled && appStateContext?.state.isCosmosDBAvailable?.cosmosDB; 
+    const SANITIZE_ANSWER = false //appStateContext?.state.frontendSettings?.sanitize_answer 
     
     const handleChevronClick = () => {
         setChevronIsExpanded(!chevronIsExpanded);

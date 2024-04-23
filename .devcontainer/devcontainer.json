@@ -1,6 +1,6 @@
 {
     "name": "Azure Developer CLI",
-    "image": "mcr.microsoft.com/devcontainers/python:3.10",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
     "features": {
         "ghcr.io/devcontainers/features/node:1": {
             "version": "16",
@@ -15,7 +15,8 @@
                 "ms-azuretools.azure-dev",
                 "ms-azuretools.vscode-bicep",
                 "ms-python.python",
-                "VisualStudioExptTeam.vscodeintellicode"
+                "VisualStudioExptTeam.vscodeintellicode",
+                "ms-edgedevtools.vscode-edge-devtools"
             ]
         },
         "codespaces": {

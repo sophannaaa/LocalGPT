@@ -18,20 +18,20 @@ export async function conversationApi(options: ConversationRequest, abortSignal:
 
 export async function getUserInfo(): Promise<UserInfo[]> {
     const response = await fetch('/.auth/me');
-    if (!response.ok) {
-        console.log("No identity provider found. Access to chat will be blocked.")
+    if (response.ok){
+        const payload = await response.json();
+        return payload;
+    }
+    else {
         return [{
             access_token: "",
             expires_on: "",
             id_token: "",
             provider_name: "",
-            user_claims: [{"typ": "name", "val": "User"}],
+            user_claims: [{"typ": "name", "val": "User"}, {"typ": "preferred_username", "val": "user@microsoft.com"}],
             user_id: "",
         }];
-    }
-
-    const payload = await response.json();
-    return payload;
+    }  
 }
 
 // export const fetchChatHistoryInit = async (): Promise<Conversation[] | null> => {
@@ -168,53 +168,6 @@ export const historyUpdate = async (messages: ChatMessage[], convId: string): Pr
     return response
 }
 
-export const historyDelete = async (convId: string) : Promise<Response> => {
-    const response = await fetch("/history/delete", {
-        method: "DELETE",
-        body: JSON.stringify({
-            conversation_id: convId,
-        }),
-        headers: {
-            "Content-Type": "application/json"
-        },
-    })
-    .then((res) => {
-        return res
-    })
-    .catch((err) => {
-        console.error("There was an issue fetching your data.");
-        let errRes: Response = {
-            ...new Response,
-            ok: false,
-            status: 500,
-        }
-        return errRes;
-    })
-    return response;
-}
-
-export const historyDeleteAll = async () : Promise<Response> => {
-    const response = await fetch("/history/delete_all", {
-        method: "DELETE",
-        body: JSON.stringify({}),
-        headers: {
-            "Content-Type": "application/json"
-        },
-    })
-    .then((res) => {
-        return res
-    })
-    .catch((err) => {
-        console.error("There was an issue fetching your data.");
-        let errRes: Response = {
-            ...new Response,
-            ok: false,
-            status: 500,
-        }
-        return errRes;
-    })
-    return response;
-}
 
 export const historyClear = async (convId: string) : Promise<Response> => {
     const response = await fetch("/history/clear", {
@@ -309,18 +262,6 @@ export const historyEnsure = async (): Promise<CosmosDBHealth> => {
     return response;
 }
 
-export const frontendSettings = async (): Promise<Response | null> => {
-    const response = await fetch("/frontend_settings", {
-        method: "GET",
-    }).then((res) => {
-        return res.json()
-    }).catch((err) => {
-        console.error("There was an issue fetching your data.");
-        return null
-    })
-
-    return response
-}
 export const historyMessageFeedback = async (messageId: string, feedback: string): Promise<Response> => {
     const response = await fetch("/history/message_feedback", {
         method: "POST",
