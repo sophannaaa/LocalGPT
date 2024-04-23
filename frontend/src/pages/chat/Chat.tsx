@@ -52,7 +52,6 @@ const Chat = () => {
     const abortFuncs = useRef([] as AbortController[]);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [processMessages, setProcessMessages] = useState<messageStatus>(messageStatus.NotRunning);
-    const [clearingChat, setClearingChat] = useState<boolean>(false);
     const [hideErrorDialog, { toggle: toggleErrorDialog }] = useBoolean(true);
     const [errorMsg, setErrorMsg] = useState<ErrorMessage | null>();
     const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true);
@@ -100,11 +99,6 @@ const Chat = () => {
             setErrorMsg(null)
         }, 500);
     }
-
-    useEffect(() => {
-        setIsLoading(appStateContext?.state.chatHistoryLoadingState === ChatHistoryLoadingState.Loading)
-    }, [appStateContext?.state.chatHistoryLoadingState])
-
 
     let assistantMessage = {} as ChatMessage
     let toolMessage = {} as ChatMessage
@@ -476,7 +470,7 @@ const Chat = () => {
     }
 
     const disabledButton = () => {
-        return isLoading || (messages && messages.length === 0) || clearingChat || appStateContext?.state.chatHistoryLoadingState === ChatHistoryLoadingState.Loading
+        return isLoading || (messages && messages.length === 0)
     }
 
     return (
