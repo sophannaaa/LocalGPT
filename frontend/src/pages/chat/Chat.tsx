@@ -35,6 +35,7 @@ import { AppStateContext } from "../../state/AppProvider";
 import { useBoolean } from "@fluentui/react-hooks";
 import { Disclaimer } from "../../components/common/Disclaimer";
 import { FAQGrid } from "../../components/FAQ/FAQGrid";
+import { Header } from "../../components/common/Header";
 
 const enum messageStatus {
     NotRunning = "Not Running",
@@ -74,6 +75,7 @@ const Chat = () => {
     }
 
     const [ASSISTANT, TOOL, ERROR] = ["assistant", "tool", "error"]
+    const NO_CONTENT_ERROR = "No content in messages object."
 
     useEffect(() => {
         if (appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.Working
@@ -180,7 +182,7 @@ const Chat = () => {
                 let errorChatMsg: ChatMessage = {
                     id: uuid(),
                     role: ERROR,
-                    content: `There was an error generating a response. Chat history can't be saved at this time. ${errorResponseMessage}`,
+                    content: `There was an error generating a response. Chat history can't be saved at this time.\n ${errorResponseMessage}`,
                     date: new Date().toISOString()
                 }
                 let resultConversation;
@@ -475,6 +477,12 @@ const Chat = () => {
 
     return (
         <div className={styles.container} role="main">
+            <Header 
+                imgSrc={MR_LOGO}
+                title="Mixed Reality Compliance Copilot"
+                onClick={newChat}
+                disabled={disabledButton()}
+            />
             <Stack horizontal className={styles.chatRoot}>
                 <div className={styles.chatContainer}>
                     {!messages || messages.length < 1 ? (
@@ -576,7 +584,7 @@ const Chat = () => {
                                     },
                                     root: {
                                         color: '#FFFFFF',
-                                        background: "radial-gradient(109.81% 107.82% at 100.1% 90.19%, #0F6CBD 33.63%, #2D87C3 70.31%, #8DDDD8 100%)"
+                                        background: "radial-gradient(circle at 50% 50%, rgba(245, 166, 200, 1) 0%, rgba(171, 78, 157, 1) 46%, rgba(116, 88, 166, 1) 100%);"
                                     },
                                     rootDisabled: {
                                         background: "#F0F0F0"

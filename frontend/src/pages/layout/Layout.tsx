@@ -26,20 +26,6 @@ const Layout = () => {
 
     return (
         <div className={styles.layout}>
-            <header className={styles.header} role={"banner"}>
-                <Stack horizontal verticalAlign="center" horizontalAlign="space-between">
-                    <Stack horizontal verticalAlign="center">
-                        <img
-                            src={MR_LOGO}
-                            className={styles.headerIcon}
-                            aria-hidden="true"
-                        />
-                        <Link to="/" className={styles.headerTitleContainer}>
-                            <h1 className={styles.headerTitle}>Mixed Reality Compliance Copilot</h1>
-                        </Link>
-                    </Stack>
-                </Stack>
-            </header>
             <Outlet />
         </div>
     );
