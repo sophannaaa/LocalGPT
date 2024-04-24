@@ -30,13 +30,13 @@ MINIMUM_SUPPORTED_AZURE_OPENAI_PREVIEW_API_VERSION="2024-02-15-preview"
 load_dotenv()
 
 # UI configuration (optional)
-UI_TITLE = os.environ.get("UI_TITLE") or "Mixed Reality Compliance Copilot"
-UI_LOGO = os.environ.get("UI_LOGO") or "/assets/MRLogo.png"
-UI_CHAT_LOGO = os.environ.get("UI_CHAT_LOGO") or "/assets/MRLogo.png"
-UI_CHAT_TITLE = os.environ.get("UI_CHAT_TITLE") or "Hi"
-UI_CHAT_DESCRIPTION = os.environ.get("UI_CHAT_DESCRIPTION") or "I'm here to answer your questions regarding Mixed Reality"
-UI_FAVICON = os.environ.get("UI_FAVICON") or "/assets/MRLogo.png"
-UI_SHOW_SHARE_BUTTON = os.environ.get("UI_SHOW_SHARE_BUTTON", "true").lower() == "false"
+# UI_TITLE = os.environ.get("UI_TITLE") or "Mixed Reality Compliance Copilot"
+# UI_LOGO = os.environ.get("UI_LOGO") or "/assets/MRLogo.png"
+# UI_CHAT_LOGO = os.environ.get("UI_CHAT_LOGO") or "/assets/MRLogo.png"
+# UI_CHAT_TITLE = os.environ.get("UI_CHAT_TITLE") or "Hi"
+# UI_CHAT_DESCRIPTION = os.environ.get("UI_CHAT_DESCRIPTION") or "I'm here to answer your questions regarding Mixed Reality"
+# UI_FAVICON = os.environ.get("UI_FAVICON") or "/assets/MRLogo.png"
+# UI_SHOW_SHARE_BUTTON = os.environ.get("UI_SHOW_SHARE_BUTTON", "true").lower() == "false"
 
 def create_app():
     app = Quart(__name__)
@@ -47,7 +47,7 @@ def create_app():
 
 @bp.route("/")
 async def index():
-    return await render_template("index.html", title=UI_TITLE, favicon=UI_FAVICON)
+    return await render_template("index.html")
 
 @bp.route("/favicon.ico")
 async def favicon():
@@ -175,20 +175,20 @@ AZURE_MLINDEX_QUERY_TYPE = os.environ.get("AZURE_MLINDEX_QUERY_TYPE")
 # Frontend Settings via Environment Variables
 AUTH_ENABLED = os.environ.get("AUTH_ENABLED", "true").lower() == "true"
 CHAT_HISTORY_ENABLED = AZURE_COSMOSDB_ACCOUNT and AZURE_COSMOSDB_DATABASE and AZURE_COSMOSDB_CONVERSATIONS_CONTAINER
-SANITIZE_ANSWER = os.environ.get("SANITIZE_ANSWER", "false").lower() == "true"
-frontend_settings = { 
-    "auth_enabled": AUTH_ENABLED, 
-    "feedback_enabled": AZURE_COSMOSDB_ENABLE_FEEDBACK and CHAT_HISTORY_ENABLED,
-    "ui": {
-        "title": UI_TITLE,
-        "logo": UI_LOGO,
-        "chat_logo": UI_CHAT_LOGO or UI_LOGO,
-        "chat_title": UI_CHAT_TITLE,
-        "chat_description": UI_CHAT_DESCRIPTION,
-        "show_share_button": UI_SHOW_SHARE_BUTTON
-    },
-    "sanitize_answer": SANITIZE_ANSWER
-}
+# SANITIZE_ANSWER = os.environ.get("SANITIZE_ANSWER", "false").lower() == "true"
+# frontend_settings = { 
+#     "auth_enabled": AUTH_ENABLED, 
+#     "feedback_enabled": AZURE_COSMOSDB_ENABLE_FEEDBACK and CHAT_HISTORY_ENABLED,
+#     "ui": {
+#         "title": UI_TITLE,
+#         "logo": UI_LOGO,
+#         "chat_logo": UI_CHAT_LOGO or UI_LOGO,
+#         "chat_title": UI_CHAT_TITLE,
+#         "chat_description": UI_CHAT_DESCRIPTION,
+#         "show_share_button": UI_SHOW_SHARE_BUTTON
+#     },
+#     "sanitize_answer": SANITIZE_ANSWER
+# }
 
 def should_use_data():
     global DATASOURCE_TYPE
@@ -596,13 +596,13 @@ async def conversation():
     
     return await conversation_internal(request_json)
 
-@bp.route("/frontend_settings", methods=["GET"])  
-def get_frontend_settings():
-    try:
-        return jsonify(frontend_settings), 200
-    except Exception as e:
-        logging.exception("Exception in /frontend_settings")
-        return jsonify({"error": str(e)}), 500  
+# @bp.route("/frontend_settings", methods=["GET"])  
+# def get_frontend_settings():
+#     try:
+#         return jsonify(frontend_settings), 200
+#     except Exception as e:
+#         logging.exception("Exception in /frontend_settings")
+#         return jsonify({"error": str(e)}), 500  
 
 ## Conversation History API ## 
 @bp.route("/history/generate", methods=["POST"])
