@@ -36,6 +36,7 @@ import { useBoolean } from "@fluentui/react-hooks";
 import { Disclaimer } from "../../components/common/Disclaimer";
 import { FAQGrid } from "../../components/FAQ/FAQGrid";
 import { Header } from "../../components/common/Header";
+import { UserChatMessage } from "../../components/UserChatMessage";
 
 const enum messageStatus {
     NotRunning = "Not Running",
@@ -74,7 +75,7 @@ const Chat = () => {
         styles: { main: { maxWidth: 450 } },
     }
 
-    const [ASSISTANT, TOOL, ERROR] = ["assistant", "tool", "error"]
+    const [USER, ASSISTANT, TOOL, ERROR] = ["user", "assistant", "tool", "error"]
     const NO_CONTENT_ERROR = "No content in messages object."
 
     useEffect(() => {
@@ -504,12 +505,10 @@ const Chat = () => {
                         <div className={styles.chatMessageStream} style={{ marginBottom: isLoading ? "40px" : "0px" }} role="log">
                             {messages.map((answer, index) => (
                                 <>
-                                    {answer.role === "user" ? (
-                                        <div className={styles.chatMessageUser} tabIndex={0}>
-                                            <div className={styles.chatMessageUserMessage}>{answer.content}</div>
-                                        </div>
+                                    {answer.role === USER ? (
+                                        <UserChatMessage message={answer.content}/>
                                     ) : (
-                                        answer.role === "assistant" ? <div className={styles.chatMessageGpt}>
+                                        answer.role === ASSISTANT ? <div className={styles.chatMessageGpt}>
                                             <Answer
                                                 answer={{
                                                     answer: answer.content,

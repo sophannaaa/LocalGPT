@@ -2,51 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Frontend Install and Build",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "install-and-run"
-      ],
-      "env": {
-        "BROWSER": "none"
-      },
-      "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "cwd": "${workspaceFolder}/frontend",
-      "postDebugTask": "run backend"
-    },
-    {
-      "name": "Frontend Install",
-      "request": "launch",
-      "runtimeArgs": [
-        "install",
-      ],
-      "cwd": "${workspaceFolder}/frontend",
-      "runtimeExecutable": "npm",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
-    },
-    {
-      "name": "Frontend Build",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "build"
-      ],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}/frontend"
-    },
-    {
-      "name": "Backend Debug",
+      "name": "Python: Quart",
       "type": "debugpy",
       "request": "launch",
       "module": "quart",
@@ -58,21 +14,36 @@
       },
       "args": [
         "run",
-        // "--no-reload",
+        "--no-reload",
         "-p 50505"
       ],
       "console": "integratedTerminal",
       "justMyCode": false,
       "envFile": "${workspaceFolder}/.env",
-    }
+    },
+    {
+      "name": "Frontend: dev",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/frontend",
+    },
+    {
+      "name": "Frontend: watch",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run watch",
+      "cwd": "${workspaceFolder}/frontend",
+    },
   ],
   "compounds": [
     {
-      "name": "Run Frontend and Backend",
+      "name": "Frontend & Backend",
       "configurations": [
-        "Frontend Install and Build",
-        "Backend Debug"
-      ]
+        "Frontend: watch",
+        "Python: Quart"
+      ],
+      "stopAll": true
     }
   ]
 }

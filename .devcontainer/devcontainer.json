@@ -16,7 +16,8 @@
                 "ms-azuretools.vscode-bicep",
                 "ms-python.python",
                 "VisualStudioExptTeam.vscodeintellicode",
-                "ms-edgedevtools.vscode-edge-devtools"
+                "ms-edgedevtools.vscode-edge-devtools",
+                "esbenp.prettier-vscode"
             ]
         },
         "codespaces": {

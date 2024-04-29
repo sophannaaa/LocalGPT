@@ -173,3 +173,11 @@ sup {
     font-size: 10px;
     line-height: 10px;
 }
+
+.copilotAvatar {
+    display: flex;
+    justify-content: flex-start;
+    align-self: flex-end;
+    align-items: center;
+    margin-bottom: 15px
+}
