@@ -1,4 +1,4 @@
-import { UserInfo, ConversationRequest, Conversation, ChatMessage, CosmosDBHealth, CosmosDBStatus } from "./models";
+import { UserInfo, ConversationRequest, Conversation, ChatMessage, CosmosDBHealth, CosmosDBStatus, Feedback } from "./models";
 import { chatHistorySampleData } from "../constants/chatHistory";
 
 export async function conversationApi(options: ConversationRequest, abortSignal: AbortSignal): Promise<Response> {
@@ -262,7 +262,7 @@ export const historyEnsure = async (): Promise<CosmosDBHealth> => {
     return response;
 }
 
-export const historyMessageFeedback = async (messageId: string, feedback: string): Promise<Response> => {
+export const historyMessageFeedback = async (messageId: string, feedback: Feedback): Promise<Response> => {
     const response = await fetch("/history/message_feedback", {
         method: "POST",
         body: JSON.stringify({

@@ -121,7 +121,7 @@
 }
 
 .accordionIcon:hover {
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .accordionTitle {
@@ -137,7 +137,7 @@
 }
 
 .accordionTitle:hover {
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .clickableSup {
@@ -180,4 +180,64 @@ sup {
     align-self: flex-end;
     align-items: center;
     margin-bottom: 15px
+}
+
+.answerLoadingContainer {
+    /* display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding-left: 100px */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8.1285px;
+    gap: 5.42px;
+    background: #FFFFFF;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.14), 0px 0px 2px rgba(0, 0, 0, 0.12);
+    border-radius: 5.419px;
+}
+
+.answerLoadingWrapper {
+    padding: 10px 40px;
+    background-color: #fff;
+    margin-right: 220px;
+    border-radius: 12px 12px 12px 4px
+}
+
+.loadingDots:after {
+    content: "";
+    animation: _loading_1sqax_134 1s infinite
+}
+
+.loadingEllipses {
+    font-size: 30px;
+}
+
+.loadingEllipses:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+    animation: ellipsis steps(4, end) 900ms infinite;
+    content: "\2026";
+    /* ascii code for the ellipsis character */
+    width: 0px;
+}
+
+@keyframes ellipsis {
+    to {
+        width: 1.25em;
+    }
+}
+
+@-webkit-keyframes ellipsis {
+    to {
+        width: 1.25em;
+    }
+}
+
+.feedback {
+    margin-top: 15px;
+    width: 100%;
+    align-items: flex-end;
 }

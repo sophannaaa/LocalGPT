@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, ReactNode, useEffect } from 'react';
 import { appStateReducer } from './AppReducer';
-import { Conversation, ChatHistoryLoadingState, CosmosDBHealth, historyList, historyEnsure, CosmosDBStatus, Feedback } from '../api';
+import { Conversation, ChatHistoryLoadingState, CosmosDBHealth, historyList, historyEnsure, CosmosDBStatus, FeedbackOptions, FeedbackRating } from '../api';
   
 export interface AppState {
     isChatHistoryOpen: boolean;
@@ -9,7 +9,7 @@ export interface AppState {
     chatHistory: Conversation[] | null;
     filteredChatHistory: Conversation[] | null;
     currentChat: Conversation | null;
-    feedbackState: { [answerId: string]: Feedback.Neutral | Feedback.Positive | Feedback.Negative; };
+    feedbackState: { [answerId: string]: FeedbackRating };
 }
 
 export type Action =
@@ -24,7 +24,7 @@ export type Action =
     | { type: 'DELETE_CHAT_HISTORY'}  // API Call
     | { type: 'DELETE_CURRENT_CHAT_MESSAGES', payload: string }  // API Call
     | { type: 'FETCH_CHAT_HISTORY', payload: Conversation[] | null }  // API Call
-    | { type: 'SET_FEEDBACK_STATE'; payload: { answerId: string; feedback: Feedback.Positive | Feedback.Negative | Feedback.Neutral } }
+    | { type: 'SET_FEEDBACK_STATE'; payload: { answerId: string; feedback: FeedbackRating } }
     | { type: 'GET_FEEDBACK_STATE'; payload: string };
 
 const initialState: AppState = {

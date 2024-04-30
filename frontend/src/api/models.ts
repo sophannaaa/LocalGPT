@@ -118,10 +118,13 @@ export type ErrorMessage = {
 //     sanitize_answer?: boolean;
 // }
 
-export enum Feedback {
+export enum FeedbackRating {
     Neutral = "neutral",
     Positive = "positive",
     Negative = "negative",
+}
+
+export enum FeedbackOptions {
     MissingCitation = "missing_citation",
     WrongCitation = "wrong_citation",
     OutOfScope = "out_of_scope",
@@ -131,5 +134,11 @@ export enum Feedback {
     Violent = "violent",
     Sexual = "sexual",
     Manipulative = "manipulative",
-    OtherHarmful = "other_harmlful"
+    OtherHarmful = "other_harmful"
+}
+
+export type Feedback = {
+    rating: FeedbackRating
+    sentiment: FeedbackOptions[],
+    message: string    
 }
