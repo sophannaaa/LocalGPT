@@ -61,13 +61,17 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
     } = props;
 
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-    const [isPositiveFeedbackCalloutVisible, { toggle: toggleIsFeedbackCalloutVisible }] = useBoolean(false);
-    const [isFeedbackRescindedCalloutVisible, { toggle: toggleIsFeedbackRescindedCalloutVisible }] = useBoolean(false);
+    // const [isPositiveFeedbackCalloutVisible, { toggle: toggleIsFeedbackCalloutVisible }] = useBoolean(false);
+    // const [isFeedbackRescindedCalloutVisible, { toggle: toggleIsFeedbackRescindedCalloutVisible }] = useBoolean(false);
+    const [isPositiveFeedbackCalloutVisible, setIsPositiveFeedbackCalloutVisible] = useState(false);
+    const [isFeedbackRescindedCalloutVisible, setIsFeedbackRescindedCalloutVisible] = useState(false);
     const [isLikeSubmitted, setIsLikeSubmitted] = useState<boolean>(false);
     const [isDislikeSubmitted, setIsDislikeSubmitted] = useState<boolean>(false);
 
     const buttonId = useId('callout-button');
     const buttonIdLike = useId('callout-button-like');
+
+    let timeoutId = null;
 
     useEffect(() => {
         if (dislike_status) {
@@ -93,8 +97,8 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
         setIsRefreshing(true);
         const response = await historyMessageFeedback(answer_id, positive_feedback_body);
         if (response.ok) {
-            toggleIsFeedbackCalloutVisible();
-            setTimeout(toggleIsFeedbackCalloutVisible, 1000);
+            setIsPositiveFeedbackCalloutVisible(true);
+            setTimeout(() => setIsPositiveFeedbackCalloutVisible(false), 1000);
             setIsLikeSubmitted(true);
         } else {
             console.error(`Failed to submit feedback. Status: ${response.status}`);
@@ -112,8 +116,8 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
         setIsRefreshing(true);
         const response = await historyMessageFeedback(answer_id, neutral_feedback_body);
         if (response.ok) {
-            toggleIsFeedbackRescindedCalloutVisible();
-            setTimeout(toggleIsFeedbackRescindedCalloutVisible, 1000);
+            setIsFeedbackRescindedCalloutVisible(true);
+            setTimeout(() => setIsFeedbackRescindedCalloutVisible(false), 1000);
             setIsLikeSubmitted(false);
         } else {
             console.error(`Failed to submit feedback. Status: ${response.status}`);
@@ -138,12 +142,12 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
                     iconProps={LikeIcon}
                     styles={buttonStyles}
                     checked={isLikeSubmitted}
-                    onClick={() => handleLikeClick()}
+                    onClick={() => !isRefreshing && handleLikeClick()}
                     allowDisabledFocus
                     disabled={isRefreshing}
                 />
                 {isPositiveFeedbackCalloutVisible && !isFeedbackRescindedCalloutVisible && (
-                    <Callout className={styles.callout} target={`#${buttonIdLike}`} onDismiss={toggleIsFeedbackCalloutVisible} role="alert">
+                    <Callout className={styles.callout} target={`#${buttonIdLike}`} onDismiss={() => setIsPositiveFeedbackCalloutVisible(false)} role="alert">
                         <DelayedRender>
                             <Text variant="small">
                                 The submission was successful
@@ -152,7 +156,7 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
                     </Callout>
                 )}
                 {isFeedbackRescindedCalloutVisible && !isPositiveFeedbackCalloutVisible && (
-                    <Callout className={styles.callout} target={`#${buttonIdLike}`} onDismiss={toggleIsFeedbackRescindedCalloutVisible} role="alert">
+                    <Callout className={styles.callout} target={`#${buttonIdLike}`} onDismiss={() => setIsFeedbackRescindedCalloutVisible(false)} role="alert">
                         <DelayedRender>
                             <Text variant="small">
                                 Feedback was rescinded successfully
