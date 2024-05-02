@@ -1,10 +1,10 @@
 import { Outlet, Link } from "react-router-dom";
 import styles from "./Layout.module.css";
-import MR_LOGO from "../../assets/MRLogo.png";
+import MR_LOGO from "@assets/MRLogo.png";
 import {  Stack } from "@fluentui/react";
 import { useContext, useEffect } from "react";
 
-import { AppStateContext } from "../../state/AppProvider";
+import { AppStateContext } from "@state/AppProvider";
 
 const Layout = () => {
     const appStateContext = useContext(AppStateContext)

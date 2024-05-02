@@ -41,8 +41,8 @@ export type Conversation = {
 }
 
 export enum ChatCompletionType {
-    ChatCompletion = "chat.completion",
-    ChatCompletionChunk = "chat.completion.chunk"
+    CHAT_COMPLETION = "chat.completion",
+    CHAT_COMPLETION_CHUNK = "chat.completion.chunk"
 }
 
 export type ChatResponseChoice = {
@@ -77,12 +77,12 @@ export type UserInfo = {
 };
 
 export enum CosmosDBStatus {
-    NotConfigured = "CosmosDB is not configured",
-    NotWorking = "CosmosDB is not working",
-    InvalidCredentials = "CosmosDB has invalid credentials",
-    InvalidDatabase = "Invalid CosmosDB database name",
-    InvalidContainer = "Invalid CosmosDB container name",
-    Working = "CosmosDB is configured and working",
+    NOT_CONFIGURED = "CosmosDB is not configured",
+    NOT_WORKING = "CosmosDB is not working",
+    INVALID_CREDENTIALS = "CosmosDB has invalid credentials",
+    INVALID_DATABASE = "Invalid CosmosDB database name",
+    INVALID_CONTAINER = "Invalid CosmosDB container name",
+    WORKING = "CosmosDB is configured and working",
 }
 
 export type CosmosDBHealth = {
@@ -91,10 +91,10 @@ export type CosmosDBHealth = {
 }
 
 export enum ChatHistoryLoadingState {
-    Loading = "loading",
-    Success = "success",
-    Fail = "fail",
-    NotStarted = "notStarted"
+    LOADING = "loading",
+    SUCCESS = "success",
+    FAIL = "fail",
+    NOT_STARTED = "notStarted"
 }
 
 export type ErrorMessage = {
@@ -119,26 +119,39 @@ export type ErrorMessage = {
 // }
 
 export enum FeedbackRating {
-    Neutral = "neutral",
-    Positive = "positive",
-    Negative = "negative",
+    NEUTRAL = "neutral",
+    POSITIVE = "positive",
+    NEGATIVE = "negative",
 }
 
 export enum FeedbackOptions {
-    MissingCitation = "missing_citation",
-    WrongCitation = "wrong_citation",
-    OutOfScope = "out_of_scope",
-    InaccurateOrIrrelevant = "inaccurate_or_irrelevant",
-    OtherUnhelpful = "other_unhelpful",
-    HateSpeech = "hate_speech",
-    Violent = "violent",
-    Sexual = "sexual",
-    Manipulative = "manipulative",
-    OtherHarmful = "other_harmful"
+    MISSING_CITATION = "missing_citation",
+    WRONG_CITATION = "wrong_citation",
+    OUT_OF_SCOPE = "out_of_scope",
+    INACCURATE_OR_IRRELEVANT = "inaccurate_or_irrelevant",
+    OTHER_UNHELPFUL = "other_unhelpful",
+    HATE_SPEECH = "hate_speech",
+    VIOLENT = "violent",
+    SEXUAL = "sexual",
+    MANIPULATIVE = "manipulative",
+    OTHER_HARMFUL = "other_harmful"
 }
 
 export type Feedback = {
     rating: FeedbackRating
     sentiment: FeedbackOptions[],
     message: string    
+}
+
+export const FeedbackBody = {
+    POSITIVE: {
+        rating: FeedbackRating.POSITIVE,
+        sentiment: [],
+        message: ''
+    },
+    NEUTRAL: {
+        rating: FeedbackRating.NEUTRAL,
+        sentiment: [],
+        message: ''
+    }
 }

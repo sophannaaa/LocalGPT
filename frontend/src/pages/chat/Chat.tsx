@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useContext, useLayoutEffect } from "react";
-import { CommandBarButton, IconButton, Dialog, DialogType, Stack, Modal } from "@fluentui/react";
+import { CommandBarButton, IconButton, Dialog, DialogType, Stack } from "@fluentui/react";
 import { SquareRegular, ErrorCircleRegular } from "@fluentui/react-icons";
 
 import ReactMarkdown from "react-markdown";
@@ -10,37 +10,32 @@ import { isEmpty } from "lodash-es";
 import DOMPurify from 'dompurify';
 
 import styles from "./Chat.module.css";
-import MR_LOGO from "../../assets/MRLogo.png";
-import { XSSAllowTags } from "../../constants/xssAllowTags";
+import MR_LOGO from "@assets/MRLogo.png";
+import { XSSAllowTags } from "@constants/xssAllowTags";
 
 import {
     ChatMessage,
     ConversationRequest,
-    conversationApi,
     Citation,
     ToolMessageContent,
     ChatResponse,
     getUserInfo,
-    Conversation,
     historyGenerate,
     historyUpdate,
-    historyClear,
     ChatHistoryLoadingState,
     CosmosDBStatus,
     ErrorMessage,
-    Feedback,
-    FeedbackRating
-} from "../../api";
-import { Answer } from "../../components/Answer";
-import { AnswerLoading } from "../../components/Answer/AnswerLoading";
-import { QuestionInput } from "../../components/QuestionInput";
-import { AppStateContext } from "../../state/AppProvider";
+} from "@api/index";
+import { Answer } from "@components/Answer";
+import { AnswerLoading } from "@components/Answer/AnswerLoading";
+import { QuestionInput } from "@components/QuestionInput";
+import { AppStateContext } from "@state/AppProvider";
 import { useBoolean } from "@fluentui/react-hooks";
-import { Disclaimer } from "../../components/common/Disclaimer";
-import { FAQGrid } from "../../components/FAQ/FAQGrid";
-import { Header } from "../../components/common/Header";
-import { UserChatMessage } from "../../components/UserChatMessage";
-import { AnswerFeedback } from "../../components/AnswerFeedback";
+import { Disclaimer } from "@components/common/Disclaimer";
+import { FAQGrid } from "@components/FAQ/FAQGrid";
+import { Header } from "@components/common/Header";
+import { UserChatMessage } from "@components/UserChatMessage";
+import { AnswerFeedback } from "@components/AnswerFeedback";
 
 const enum messageStatus {
     NotRunning = "Not Running",
@@ -64,11 +59,7 @@ const Chat = () => {
     const [userName, setUserName] = useState<string>("user");
     const [userGreeeting, setUserGreeting] = useState<string>("Hi")
     const [chatTitle, setChatTitle] = useState<string>("Hi!");
-    const [dislikeSubmissionSuccess, setDislikeSubmissionSuccess] = useState<boolean>(false);
-    const [showFeedback, setShowFeedback] = useState<boolean>(false);
-    const [feedbackValue, setFeedbackValue] = useState<Feedback>({rating: FeedbackRating.Neutral, sentiment: [], message: ''});
-    const [selectedMessageId, setSelectedMessageId] = useState<string>('');
-    
+
 
     const errorDialogContentProps = {
         type: DialogType.close,
@@ -88,9 +79,9 @@ const Chat = () => {
     const NO_CONTENT_ERROR = "No content in messages object."
 
     useEffect(() => {
-        if (appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.Working
-            && appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured
-            && appStateContext?.state.chatHistoryLoadingState === ChatHistoryLoadingState.Fail
+        if (appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.WORKING
+            && appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NOT_CONFIGURED
+            && appStateContext?.state.chatHistoryLoadingState === ChatHistoryLoadingState.FAIL
             && hideErrorDialog) {
             let subtitle = `${appStateContext.state.isCosmosDBAvailable.status}. Please contact the site administrator.`
             setErrorMsg({
@@ -485,37 +476,9 @@ const Chat = () => {
         return isLoading || (messages && messages.length === 0)
     }
 
-
-    // Feedback handlers
-    const handleDislikeSubmissionSuccess = () => {
-        handleSetMessageDislikeStatus(true)
-    }
-
-    const handleDislikeSubmissionFail = () => {
-        handleSetMessageDislikeStatus(false);
-
-    };
-
-    const handleSetMessageDislikeStatus = (status: boolean) => {
-        
-    };
-
-    const handleDislikeClick = () => {
-        setShowFeedback(true);
-    };
-
-    const handleDislikeDismiss = () => {
-        setShowFeedback(false);
-    }
-
-
-    const handleSetSelectedMessageId = (value: string) => {
-        setSelectedMessageId(value);
-    };
-
     return (
         <div className={styles.container} role="main">
-            <Header 
+            <Header
                 imgSrc={MR_LOGO}
                 title="Mixed Reality Compliance Copilot"
                 onClick={newChat}
@@ -543,7 +506,7 @@ const Chat = () => {
                             {messages.map((answer, index) => (
                                 <>
                                     {answer.role === USER ? (
-                                        <UserChatMessage message={answer.content}/>
+                                        <UserChatMessage message={answer.content} />
                                     ) : (
                                         answer.role === ASSISTANT ? <div className={styles.chatMessageGpt}>
                                             <Answer
@@ -554,10 +517,7 @@ const Chat = () => {
                                                     feedback: answer.feedback
                                                 }}
                                                 onCitationClicked={c => onShowCitation(c)}
-                                                onDislikeClick={handleDislikeClick}
-                                                dislike_status={false}
-                                                handleSetSelectedMessageId={(value: any) => handleSetSelectedMessageId(value)}
-                                                handleDislikeSubmissionFailed={handleDislikeSubmissionFail}
+                                                isAnswerGenerating={isLoading}
                                             />
                                         </div> : answer.role === ERROR ? <div className={styles.chatMessageError}>
                                             <Stack horizontal className={styles.chatMessageErrorContent}>
@@ -607,7 +567,7 @@ const Chat = () => {
                             </Stack>
                         )}
                         <Stack>
-                            {appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured && <CommandBarButton
+                            {appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NOT_CONFIGURED && <CommandBarButton
                                 role="button"
                                 styles={{
                                     icon: {
@@ -648,15 +608,7 @@ const Chat = () => {
                         />
                     </Stack>
                 </div>
-                <AnswerFeedback
-                    isModalOpen={showFeedback} 
-                    message_id={selectedMessageId}
-                    handleDislikeDismiss={handleDislikeDismiss}
-                    handleDislikeSubmissionSuccess={handleDislikeSubmissionSuccess}
-                    handleDislikeSubmissionFail={handleDislikeSubmissionFail}
-                    // handleUpdateDislikeStatus={(status: boolean) => handleSetMessageDislikeStatus(messages, status)}
-                    // handleUpdateFeedbackValue={(value:Feedback) => updateFeedbackValue(value)}
-                />
+                <AnswerFeedback />
                 {/* Citation Panel */}
                 {messages && messages.length > 0 && isCitationPanelOpen && activeCitation && (
                     <Stack.Item className={styles.citationPanel} tabIndex={0} role="tabpanel" aria-label="Citations Panel">

@@ -1,5 +1,5 @@
 import { UserInfo, ConversationRequest, Conversation, ChatMessage, CosmosDBHealth, CosmosDBStatus, Feedback } from "./models";
-import { chatHistorySampleData } from "../constants/chatHistory";
+import { chatHistorySampleData } from "@constants/chatHistory";
 
 export async function conversationApi(options: ConversationRequest, abortSignal: AbortSignal): Promise<Response> {
     const response = await fetch("/conversation", {
@@ -228,16 +228,16 @@ export const historyEnsure = async (): Promise<CosmosDBHealth> => {
         let respJson = await res.json();
         let formattedResponse;
         if(respJson.message){
-            formattedResponse = CosmosDBStatus.Working
+            formattedResponse = CosmosDBStatus.WORKING
         }else{
             if(res.status === 500){
-                formattedResponse = CosmosDBStatus.NotWorking
+                formattedResponse = CosmosDBStatus.NOT_WORKING
             }else if(res.status === 401){
-                formattedResponse = CosmosDBStatus.InvalidCredentials    
+                formattedResponse = CosmosDBStatus.INVALID_CREDENTIALS    
             }else if(res.status === 422){ 
                 formattedResponse = respJson.error    
             }else{
-                formattedResponse = CosmosDBStatus.NotConfigured
+                formattedResponse = CosmosDBStatus.NOT_CONFIGURED
             }
         }
         if(!res.ok){

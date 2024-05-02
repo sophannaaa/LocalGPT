@@ -1,5 +1,5 @@
 import styles from "./UserChatMessage.module.css";
-import UserAvatar from '../../assets/squidward.svg';
+import UserAvatar from '@assets/squidward.svg';
 
 interface IUserChatMessageProps {
     message: string;

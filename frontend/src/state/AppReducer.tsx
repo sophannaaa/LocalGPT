@@ -1,5 +1,5 @@
-import { Conversation, FeedbackOptions, fetchChatHistoryInit, historyList } from '../api';
-import { Action, AppState } from './AppProvider';
+import { Conversation, FeedbackOptions, fetchChatHistoryInit, historyList } from '@api/index';
+import { Action, AppState, ActionType } from './AppProvider';
 
 // Define the reducer function
 export const appStateReducer = (state: AppState, action: Action): AppState => {
@@ -11,24 +11,24 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
         case 'UPDATE_CHAT_HISTORY_LOADING_STATE':
             return { ...state, chatHistoryLoadingState: action.payload };
         case 'UPDATE_CHAT_HISTORY':
-            if(!state.chatHistory || !state.currentChat){
+            if (!state.chatHistory || !state.currentChat) {
                 return state;
             }
             let conversationIndex = state.chatHistory.findIndex(conv => conv.id === action.payload.id);
             if (conversationIndex !== -1) {
                 let updatedChatHistory = [...state.chatHistory];
                 updatedChatHistory[conversationIndex] = state.currentChat
-                return {...state, chatHistory: updatedChatHistory}
+                return { ...state, chatHistory: updatedChatHistory }
             } else {
                 return { ...state, chatHistory: [...state.chatHistory, action.payload] };
             }
         case 'UPDATE_CHAT_TITLE':
-            if(!state.chatHistory){
+            if (!state.chatHistory) {
                 return { ...state, chatHistory: [] };
             }
             let updatedChats = state.chatHistory.map(chat => {
                 if (chat.id === action.payload.id) {
-                    if(state.currentChat?.id === action.payload.id){
+                    if (state.currentChat?.id === action.payload.id) {
                         state.currentChat.title = action.payload.title;
                     }
                     //TODO: make api call to save new title to DB
@@ -38,7 +38,7 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
             });
             return { ...state, chatHistory: updatedChats };
         case 'DELETE_CHAT_ENTRY':
-            if(!state.chatHistory){
+            if (!state.chatHistory) {
                 return { ...state, chatHistory: [] };
             }
             let filteredChat = state.chatHistory.filter(chat => chat.id !== action.payload);
@@ -50,7 +50,7 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
             return { ...state, chatHistory: [], filteredChatHistory: [], currentChat: null };
         case 'DELETE_CURRENT_CHAT_MESSAGES':
             //TODO: make api call to delete current conversation messages from DB
-            if(!state.currentChat || !state.chatHistory){
+            if (!state.currentChat || !state.chatHistory) {
                 return state;
             }
             const updatedCurrentChat = {
@@ -72,8 +72,32 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
                     ...state.feedbackState,
                     [action.payload.answerId]: action.payload.feedback,
                 },
-            };    
+            };
+        case ActionType.SET_MESSAGE_FEEDBACK:
+            return {
+                ...state,
+                messageIdFeedback: {
+                    ...state.messageIdFeedback,
+                    [action.payload.messageId]: action.payload.feedback
+                }
+            };
+        case ActionType.REMOVE_MESSAGE_FEEDBACK:
+            const { [action.payload]: _, ...newMessageIdFeedback } = state.messageIdFeedback;
+            return {
+                ...state,
+                messageIdFeedback: newMessageIdFeedback,
+            };
+        case ActionType.SET_SHOW_FEEDBACK:
+            return {
+                ...state,
+                showFeedback: action.payload,
+            };
+        case ActionType.SET_CURRENT_MESSAGE_ID_FEEDBACK:
+            return {
+                ...state,
+                currentMessageIdFeedback: action.payload,
+            };
         default:
             return state;
-      }
+    }
 };

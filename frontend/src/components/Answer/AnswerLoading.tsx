@@ -1,7 +1,7 @@
 import { Stack } from "@fluentui/react";
 import styles from "./Answer.module.css";
-import GPT_AVATAR from "../../assets/GPTAvatar.svg";
-import loading from "../../assets/loading.gif";
+import GPT_AVATAR from "@assets/GPTAvatar.svg";
+import loading from "@assets/loading.gif";
 
 export const AnswerLoading = () => {
     

@@ -1,5 +1,5 @@
 import { FAQButton } from "./FAQButton";
-import { faqList } from "../../constants/faqList"
+import { faqList } from "@constants/faqList"
 import { Stack } from "@fluentui/react";
 
 import styles from "./FAQGrid.module.css";

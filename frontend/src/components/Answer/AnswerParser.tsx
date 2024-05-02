@@ -1,4 +1,4 @@
-import { AskResponse, Citation } from "../../api";
+import { AskResponse, Citation } from "@api/index";
 import { cloneDeep } from "lodash-es";
 
 
