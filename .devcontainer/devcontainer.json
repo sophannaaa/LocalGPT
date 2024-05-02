@@ -3,7 +3,7 @@
     "image": "mcr.microsoft.com/devcontainers/python:3.11",
     "features": {
         "ghcr.io/devcontainers/features/node:1": {
-            "version": "16",
+            "version": "21",
             "nodeGypDependencies": false
         },
         "ghcr.io/devcontainers/features/azure-cli:1.0.8": {},
@@ -16,7 +16,9 @@
                 "ms-azuretools.vscode-bicep",
                 "ms-python.python",
                 "VisualStudioExptTeam.vscodeintellicode",
-                "ms-edgedevtools.vscode-edge-devtools"
+                "ms-edgedevtools.vscode-edge-devtools",
+                "esbenp.prettier-vscode",
+                "ms-python.debugpy"
             ]
         },
         "codespaces": {
