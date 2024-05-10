@@ -512,7 +512,7 @@ const Chat = () => {
                           message_id: answer.id,
                           feedback: answer.feedback
                         }}
-                        onCitationClicked={c => onShowCitation(c)}
+                        onCitationClicked={c => onViewSource(c)}
                         isAnswerGenerating={isLoading}
                       />
                     </div>

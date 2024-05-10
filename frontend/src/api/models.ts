@@ -102,22 +102,6 @@ export type ErrorMessage = {
   subtitle: string
 }
 
-// export type UI = {
-//     title: string;
-//     chat_title: string;
-//     chat_description: string;
-//     logo?: string;
-//     chat_logo?: string;
-//     show_share_button?: boolean
-// }
-
-// export type FrontendSettings = {
-//     auth_enabled?: string | null;
-//     feedback_enabled?: string | null;
-//     ui?: UI;
-//     sanitize_answer?: boolean;
-// }
-
 export enum FeedbackRating {
   NEUTRAL = 'neutral',
   POSITIVE = 'positive',
