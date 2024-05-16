@@ -36,12 +36,15 @@ import { FAQGrid } from '@components/FAQ/FAQGrid'
 import { Header } from '@components/common/Header'
 import { UserChatMessage } from '@components/UserChatMessage'
 import { AnswerFeedback } from '@components/AnswerFeedback'
+import { PolicyNotice } from '@components/PolicyNotice'
 
 const enum messageStatus {
   NotRunning = 'Not Running',
   Processing = 'Processing',
   Done = 'Done'
 }
+
+const userGreeting = 'Hi'
 
 const Chat = () => {
   const appStateContext = useContext(AppStateContext)
@@ -57,8 +60,10 @@ const Chat = () => {
   const [errorMsg, setErrorMsg] = useState<ErrorMessage | null>()
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true)
   const [userName, setUserName] = useState<string>('user')
-  const [userGreeeting, setUserGreeting] = useState<string>('Hi')
+  const [userEmail, setUserEmail] = useState<string>('email')
   const [chatTitle, setChatTitle] = useState<string>('Hi!')
+  const [showPolicyNotice, setShowPolicyNotice] = useState<boolean>(true);
+  const [policyAgreementStatus, setPolicyAgreementStatus] = useState<boolean>(false);
 
   const errorDialogContentProps = {
     type: DialogType.close,
@@ -138,17 +143,25 @@ const Chat = () => {
   }
 
   const makeApiRequestWithCosmosDB = async (question: string, conversationId?: string) => {
+
+
     handleDisclaimerClose()
     setIsLoading(true)
     setShowLoadingMessage(true)
     const abortController = new AbortController()
     abortFuncs.current.unshift(abortController)
 
+
     const userMessage: ChatMessage = {
       id: uuid(),
       role: 'user',
       content: question,
       date: new Date().toISOString()
+    }
+
+    if (userName.toLowerCase() != 'dummy' && userEmail.toLowerCase() != 'dummy') {
+      userMessage.user_name = userName;
+      userMessage.user_email = userEmail;
     }
 
     //api call params set here (generate)
@@ -435,13 +448,17 @@ const Chat = () => {
     }
   }, [processMessages])
 
-  // get user info and set chat title to display greeting and first name
   useEffect(() => {
+    // gets user info and set chat title to display greeting and first name
     getUserInfo().then(response => {
-      const fullname = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val
-      const firstname = fullname.split(' ')[0]
-      setUserName(firstname)
-      setChatTitle(userGreeeting + ', ' + firstname + '!') // Hi, First_Name!
+      const user_id = response[0]?.user_id
+      setUserEmail(user_id)
+
+
+      const fullName = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val
+      const firstName = fullName.split(' ')[0]
+      setUserName(fullName)
+      setChatTitle(userGreeting + ', ' + firstName + '!') // Hi, First_Name!
     })
   }, [])
 
@@ -458,6 +475,19 @@ const Chat = () => {
     if (citation.url && !citation.url.includes('blob.core')) {
       window.open(citation.url, '_blank')
     }
+  }
+
+  const handleViewPolicyNotice = () => {
+    setShowPolicyNotice(true)
+  }
+
+  const handlePolicyAgreementStatus = () => {
+    setPolicyAgreementStatus(true)
+    setShowPolicyNotice(false)
+  }
+
+  const handlePolicyNoticeDismiss = () => {
+    setShowPolicyNotice(false)
   }
 
   const parseCitationFromMessage = (message: ChatMessage) => {
@@ -478,7 +508,8 @@ const Chat = () => {
 
   return (
     <div className={styles.container} role="main">
-      <Header imgSrc={MR_LOGO} title="Mixed Reality Compliance Copilot" onClick={newChat} disabled={disabledButton()} />
+      <Header imgSrc={MR_LOGO} title="Mixed Reality Compliance Copilot" onClick={newChat} disabled={disabledButton()} onViewPolicyClick={handleViewPolicyNotice} />
+      <PolicyNotice hidden={showPolicyNotice} onDismiss={handlePolicyNoticeDismiss} onAgree={handlePolicyAgreementStatus} />
       <Stack horizontal className={styles.chatRoot}>
         <div className={styles.chatContainer}>
           {!messages || messages.length < 1 ? (
@@ -592,23 +623,18 @@ const Chat = () => {
                   aria-label="start a new chat button"
                 />
               )}
-
-              <Dialog
-                hidden={hideErrorDialog}
-                onDismiss={handleErrorDialogClose}
-                dialogContentProps={errorDialogContentProps}
-                modalProps={modalProps}></Dialog>
             </Stack>
             <QuestionInput
               clearOnSend
               placeholder="Type a new question..."
-              disabled={isLoading}
+              disabled={isLoading || !policyAgreementStatus}
               onSend={(question, id) => {
                 makeApiRequestWithCosmosDB(question, id)
               }}
               conversationId={
                 appStateContext?.state.currentChat?.id ? appStateContext?.state.currentChat?.id : undefined
               }
+              policyAgreementStatus={policyAgreementStatus}
             />
           </Stack>
         </div>

@@ -140,6 +140,10 @@ class CosmosConversationClient():
             'content': input_message['content']
         }
 
+        if message['role'] == 'user':
+            message['userName'] = input_message['user_name']
+            message['userEmail'] = input_message['user_email']
+
         if self.enable_message_feedback:
             message['feedback'] = ''
         

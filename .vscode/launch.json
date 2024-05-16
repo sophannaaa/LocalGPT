@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Quart",
+      "name": "Backend",
       "type": "debugpy",
       "request": "launch",
       "module": "quart",
@@ -41,7 +41,7 @@
       "name": "Frontend & Backend",
       "configurations": [
         "Frontend: watch",
-        "Python: Quart"
+        "Backend"
       ],
       "stopAll": true
     }

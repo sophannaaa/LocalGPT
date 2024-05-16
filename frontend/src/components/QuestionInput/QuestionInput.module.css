@@ -21,6 +21,16 @@
   margin-right: 12px;
 }
 
+.questionInputTextAreaDisabled {
+  width: 100%;
+  line-height: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 12px;
+  margin-right: 12px;
+  cursor: not-allowed;
+}
+
 .questionInputSendButtonContainer {
   position: absolute;
   right: 24px;
@@ -31,6 +41,7 @@
   width: 24px;
   height: 23px;
 }
+
 
 .questionInputSendButtonDisabled {
   /* opacity: 0.4; */
@@ -46,12 +57,10 @@
   height: 4px;
   left: 0%;
   bottom: 0%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(245, 166, 200, 1) 0%,
-    rgba(171, 78, 157, 1) 46%,
-    rgba(116, 88, 166, 1) 100%
-  );
+  background: radial-gradient(circle at 50% 50%,
+      rgba(245, 166, 200, 1) 0%,
+      rgba(171, 78, 157, 1) 46%,
+      rgba(116, 88, 166, 1) 100%);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
