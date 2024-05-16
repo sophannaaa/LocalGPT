@@ -10,7 +10,7 @@ export interface IAnswerFeedbackProps {
 }
 
 export const AnswerFeedback: React.FC<IAnswerFeedbackProps> = (props: IAnswerFeedbackProps) => {
-  const {} = props
+  const { } = props
 
   const appStateContext = useContext(AppStateContext)
 

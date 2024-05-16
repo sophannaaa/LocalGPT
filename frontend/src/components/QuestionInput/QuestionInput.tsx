@@ -10,13 +10,14 @@ interface Props {
   placeholder?: string
   clearOnSend?: boolean
   conversationId?: string
+  policyAgreementStatus: boolean
 }
 
-export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conversationId }: Props) => {
+export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conversationId, policyAgreementStatus }: Props) => {
   const [question, setQuestion] = useState<string>('')
 
   const sendQuestion = () => {
-    if (disabled || !question.trim()) {
+    if (disabled || !question.trim() || !policyAgreementStatus) {
       return
     }
 
@@ -42,12 +43,12 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
     setQuestion(newValue || '')
   }
 
-  const sendQuestionDisabled = disabled || !question.trim()
+  const sendQuestionDisabled = disabled || !question.trim() || !policyAgreementStatus
 
   return (
     <Stack horizontal className={styles.questionInputContainer}>
       <TextField
-        className={styles.questionInputTextArea}
+        className={policyAgreementStatus ? styles.questionInputTextArea : styles.questionInputTextAreaDisabled}
         placeholder={placeholder}
         multiline
         resizable={false}
@@ -55,6 +56,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
         value={question}
         onChange={onQuestionChange}
         onKeyDown={onEnterPress}
+        disabled={!policyAgreementStatus}
       />
       <div
         className={styles.questionInputSendButtonContainer}

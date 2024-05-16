@@ -31,6 +31,8 @@ export type ChatMessage = {
   date: string
   feedback?: Feedback
   context?: string
+  user_name?: string
+  user_email?: string
 }
 
 export type Conversation = {
