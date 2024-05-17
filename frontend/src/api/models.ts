@@ -10,9 +10,9 @@ export type Citation = {
   part_index?: number
   content: string
   id: string
-  title: string | null
+  title: string
   filepath: string | null
-  url: string | null
+  url: string
   metadata: string | null
   chunk_id: string | null
   reindex_id: string | null

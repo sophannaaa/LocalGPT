@@ -38,24 +38,24 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
     setChevronIsExpanded(isRefAccordionOpen)
   }, [isRefAccordionOpen])
 
-  const createCitationFilepath = (citation: Citation, index: number, truncate: boolean = false) => {
-    let citationFilename = ''
+  // const createCitationFilepath = (citation: Citation, index: number, truncate: boolean = false) => {
+  //   let citationFilename = ''
 
-    if (citation.filepath) {
-      const part_i = citation.part_index ?? (citation.chunk_id ? parseInt(citation.chunk_id) + 1 : '')
-      if (truncate && citation.filepath.length > filePathTruncationLimit) {
-        const citationLength = citation.filepath.length
-        citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)} - Part ${part_i}`
-      } else {
-        citationFilename = `${citation.filepath} - Part ${part_i}`
-      }
-    } else if (citation.filepath && citation.reindex_id) {
-      citationFilename = `${citation.filepath} - Part ${citation.reindex_id}`
-    } else {
-      citationFilename = `Citation ${index}`
-    }
-    return citationFilename
-  }
+  //   if (citation.filepath) {
+  //     const part_i = citation.part_index ?? (citation.chunk_id ? parseInt(citation.chunk_id) + 1 : '')
+  //     if (truncate && citation.filepath.length > filePathTruncationLimit) {
+  //       const citationLength = citation.filepath.length
+  //       citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)} - Part ${part_i}`
+  //     } else {
+  //       citationFilename = `${citation.filepath} - Part ${part_i}`
+  //     }
+  //   } else if (citation.filepath && citation.reindex_id) {
+  //     citationFilename = `${citation.filepath} - Part ${citation.reindex_id}`
+  //   } else {
+  //     citationFilename = `Citation ${index}`
+  //   }
+  //   return citationFilename
+  // }
 
   return (
     <>
@@ -80,7 +80,7 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
           </Stack>
         </Stack.Item>
         <Stack horizontal className={styles.answerFooter}>
-          {!!parsedAnswer.citations.length && (
+          {!!Object.keys(parsedAnswer.citations).length && (
             <Stack.Item onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? toggleIsRefAccordionOpen() : null)}>
               <Stack style={{ width: '100%' }}>
                 <Stack horizontal horizontalAlign="start" verticalAlign="center">
@@ -91,8 +91,8 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
                     tabIndex={0}
                     role="button">
                     <span>
-                      {parsedAnswer.citations.length > 1
-                        ? parsedAnswer.citations.length + ' references'
+                      {Object.keys(parsedAnswer.citations).length > 1
+                        ? Object.keys(parsedAnswer.citations).length + ' references'
                         : '1 reference'}
                     </span>
                   </Text>
@@ -113,22 +113,25 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
         </Stack>
         {chevronIsExpanded && (
           <div style={{ marginTop: 8, display: 'flex', flexFlow: 'wrap column', maxHeight: '150px', gap: '4px' }}>
-            {parsedAnswer.citations.map((citation, idx) => {
+            {Object.entries(parsedAnswer.citations).map(([url, citationsContainer]) => {
+              const referenceNumber = citationsContainer.referenceNumber
+              const citation = citationsContainer.citations[0] // just get first citation since it contains url
               return (
                 <span
-                  title={createCitationFilepath(citation, ++idx)}
+                  title={citation.title}
                   tabIndex={0}
                   role="link"
-                  key={idx}
+                  key={referenceNumber}
                   onClick={() => onCitationClicked(citation)}
                   onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? onCitationClicked(citation) : null)}
                   className={styles.citationContainer}
-                  aria-label={createCitationFilepath(citation, idx)}>
-                  <div className={styles.citation}>{idx}</div>
-                  {createCitationFilepath(citation, idx, true)}
+                  aria-label={citation.title}>
+                  <div className={styles.citation}>{citationsContainer.referenceNumber}</div>
+                  {citation.title}
                 </span>
               )
             })}
+
           </div>
         )}
         <Stack className={styles.feedback}>

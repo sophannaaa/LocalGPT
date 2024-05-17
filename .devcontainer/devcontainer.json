@@ -23,12 +23,13 @@
         },
         "codespaces": {
             "openFiles": [
-              "README.md"
+                "README.md"
             ]
         }
     },
     "forwardPorts": [
-        5000
+        5000,
+        50505
     ],
     "remoteUser": "vscode",
     "hostRequirements": {
