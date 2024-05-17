@@ -54,13 +54,24 @@ export const PolicyNotice: React.FC<IPolicyNotice> = (props: IPolicyNotice) => {
             }}
         >
             <div className={styles.header}>
-                <span id="titleId">Policy Notice</span>
+                <span id="titleId">Notice</span>
                 {agreed && <IconButton className={styles.iconButton} iconProps={cancelIcon} ariaLabel="Close" onClick={onDismiss} />}
             </div>
 
             <div className={styles.body}>
                 <p>
-                    Please review the
+                    This is not an approved environment to transmit ITAR/CUI data.
+                    <br />
+                    <br />
+                    By clicking accept you acknowledge that you have read and understood the
+                    <Link
+                        onClick={handleLinkClick}
+                        style={{ textDecoration: 'underline' }}
+                        href={linkToCUIPolicy}
+                        target={linkToCUIPolicy}>
+                        Mixed Reality CUI Policy.
+                    </Link>
+                    {/* Please review the
                     <Link
                         onClick={handleLinkClick}
                         style={{ textDecoration: 'underline' }}
@@ -74,11 +85,11 @@ export const PolicyNotice: React.FC<IPolicyNotice> = (props: IPolicyNotice) => {
                     Come back to this webpage after having reviewed the policy.
                     <br />
                     You will not be able to proceed forward or input any questions until you agree.
-                    <br />
+                    <br /> */}
                 </p>
 
                 <Stack horizontalAlign="stretch">
-                    <PrimaryButton onClick={handleAgree} disabled={!linkClicked} style={{ margin: '10px 30%' }}>I Accept</PrimaryButton>
+                    <PrimaryButton onClick={handleAgree} style={{ margin: '10px 30%' }}>I Accept</PrimaryButton>
                 </Stack>
             </div>
         </Modal>

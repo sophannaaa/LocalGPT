@@ -1,12 +1,12 @@
 export const faqList = [
-  'How do I conduct a risk assessment?',
-  'How do I get tented for Delaware?',
-  'I lost my asset, what do I do?',
-  'What is the formal process for submitting a resignation letter?',
-  'How do I calculate inherent risk and residual risk score?',
-  'Is Wilmington or Dover the capital of Delaware?',
-  'Who do I reach out to get a risk assessment started?',
+  'How do I get someone tented for Delaware?',
+  'I lost my program asset, what do I do?',
+  'How do I securely transfer data from Wilmington to Corp?',
+  'How do I configure a space to be ITAR compliant?',
+  'How can I request access to use ITAR approved spaces?',
   'Can I bring my IVAS device home?',
-  'I lost my badge, what do I do?',
-  'How do I delegate a space for delaware use?'
+  'How do I report a trade incident?',
+  'What information can I share with non-tented individuals?',
+  'How do I determine CUI?',
+  'How do I get a supplier approved for the program?'
 ]

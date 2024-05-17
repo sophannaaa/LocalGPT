@@ -57,6 +57,17 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
   //   return citationFilename
   // }
 
+  function determineTitle(citation: Citation): string {
+    const match = citation.title.match(/^Hide-/)
+    if (match && match[0] === 'Hide-') {
+      citation.url = 'https://delawarewiki.com/'
+      citation.filepath = 'Delaware Wiki'
+      citation.title = 'Delaware Wiki'
+    }
+
+    return citation.title
+  }
+
   return (
     <>
       <div className={styles.copilotAvatar}>
@@ -116,9 +127,10 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
             {Object.entries(parsedAnswer.citations).map(([url, citationsContainer]) => {
               const referenceNumber = citationsContainer.referenceNumber
               const citation = citationsContainer.citations[0] // just get first citation since it contains url
+              const citationTitle = determineTitle(citation)
               return (
                 <span
-                  title={citation.title}
+                  title={citationTitle}
                   tabIndex={0}
                   role="link"
                   key={referenceNumber}
