@@ -451,8 +451,8 @@ const Chat = () => {
   useEffect(() => {
     // gets user info and set chat title to display greeting and first name
     getUserInfo().then(response => {
-      const user_id = response[0]?.user_id
-      setUserEmail(user_id)
+      const user_email = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'preferred_username')?.val
+      setUserEmail(user_email)
 
 
       const fullName = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val
