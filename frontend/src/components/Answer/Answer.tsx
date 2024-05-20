@@ -123,7 +123,7 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
           </Stack.Item>
         </Stack>
         {chevronIsExpanded && (
-          <div style={{ marginTop: 8, display: 'flex', flexFlow: 'wrap column', maxHeight: '150px', gap: '4px' }}>
+          <div style={{ marginTop: 8, display: 'flex', flexFlow: 'wrap column', gap: '4px' }}>
             {Object.entries(parsedAnswer.citations).map(([url, citationsContainer]) => {
               const referenceNumber = citationsContainer.referenceNumber
               const citation = citationsContainer.citations[0] // just get first citation since it contains url
