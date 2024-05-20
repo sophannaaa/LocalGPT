@@ -10,9 +10,9 @@ export type Citation = {
   part_index?: number
   content: string
   id: string
-  title: string | null
+  title: string
   filepath: string | null
-  url: string | null
+  url: string
   metadata: string | null
   chunk_id: string | null
   reindex_id: string | null
@@ -31,6 +31,8 @@ export type ChatMessage = {
   date: string
   feedback?: Feedback
   context?: string
+  user_name?: string
+  user_email?: string
 }
 
 export type Conversation = {
@@ -101,22 +103,6 @@ export type ErrorMessage = {
   title: string
   subtitle: string
 }
-
-// export type UI = {
-//     title: string;
-//     chat_title: string;
-//     chat_description: string;
-//     logo?: string;
-//     chat_logo?: string;
-//     show_share_button?: boolean
-// }
-
-// export type FrontendSettings = {
-//     auth_enabled?: string | null;
-//     feedback_enabled?: string | null;
-//     ui?: UI;
-//     sanitize_answer?: boolean;
-// }
 
 export enum FeedbackRating {
   NEUTRAL = 'neutral',

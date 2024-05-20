@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Quart",
+      "name": "Backend",
       "type": "debugpy",
       "request": "launch",
       "module": "quart",
@@ -19,29 +19,35 @@
       ],
       "console": "integratedTerminal",
       "justMyCode": false,
-      "envFile": "${workspaceFolder}/.env",
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "name": "Frontend: dev",
       "type": "node-terminal",
       "request": "launch",
       "command": "npm run dev",
-      "cwd": "${workspaceFolder}/frontend",
+      "cwd": "${workspaceFolder}/frontend"
     },
     {
       "name": "Frontend: watch",
       "type": "node-terminal",
       "request": "launch",
       "command": "npm run watch",
-      "cwd": "${workspaceFolder}/frontend",
+      "cwd": "${workspaceFolder}/frontend"
     },
+    {
+      "type": "msedge",
+      "request": "attach",
+      "name": "LocalGPT",
+      "port": 53382
+    }
   ],
   "compounds": [
     {
       "name": "Frontend & Backend",
       "configurations": [
         "Frontend: watch",
-        "Python: Quart"
+        "Backend"
       ],
       "stopAll": true
     }
