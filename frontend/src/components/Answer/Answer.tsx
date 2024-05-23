@@ -5,7 +5,7 @@ import DOMPurify from 'dompurify'
 import { FeedbackButton } from '@components/AnswerFeedback/FeedbackButton'
 
 import styles from './Answer.module.css'
-import GPT_AVATAR from '@assets/GPTAvatar.svg'
+import GPT_AVATAR from '@assets/MR-GPTAvatar.svg'
 
 import { AskResponse, Citation } from '@api/index'
 import { parseAnswer } from './AnswerParser'
@@ -71,7 +71,7 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
   return (
     <>
       <div className={styles.copilotAvatar}>
-        <img src={GPT_AVATAR} style={{ width: '32px', height: '32px' }} />
+        <img src={GPT_AVATAR} style={{ width: '32px', height: '32px', border: '2px solid rgb(116 116 116)', borderRadius: '16px' }} />
       </div>
       <Stack className={styles.answerContainer} tabIndex={0}>
         <Stack.Item>

@@ -38,8 +38,9 @@ export async function getUserInfo(): Promise<UserInfo[]> {
         provider_name: '',
         user_claims: [
           { typ: 'name', val: 'User' },
+          { typ: 'preferred_username', val: 'user@email.com' },
         ],
-        user_id: 'user@email.com'
+        user_id: ''
       }
     ]
   }
