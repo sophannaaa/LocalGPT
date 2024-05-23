@@ -508,7 +508,7 @@ const Chat = () => {
 
   return (
     <div className={styles.container} role="main">
-      <Header imgSrc={MR_LOGO} title="Mixed Reality Compliance Copilot" onClick={newChat} disabled={disabledButton()} onViewPolicyClick={handleViewPolicyNotice} />
+      <Header imgSrc={MR_LOGO} title="Program Protection and Compliance Copilot" onClick={newChat} disabled={disabledButton()} onViewPolicyClick={handleViewPolicyNotice} />
       <PolicyNotice hidden={showPolicyNotice} onDismiss={handlePolicyNoticeDismiss} onAgree={handlePolicyAgreementStatus} />
       <Stack horizontal className={styles.chatRoot}>
         <div className={styles.chatContainer}>
@@ -574,7 +574,7 @@ const Chat = () => {
                 className={styles.disclaimerContainer}
                 onDismiss={handleDisclaimerClose}
                 text={
-                  'This Copilot currently provides information on Mixed Reality Security and Compliance. This is currently a preview - AI generated responses may be inaccurate.'
+                  'This Copilot currently provides information on  Program Security and Compliance. This is currently a preview - AI generated responses may be inaccurate.'
                 }
               />
             )}
