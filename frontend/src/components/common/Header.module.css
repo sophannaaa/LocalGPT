@@ -48,12 +48,13 @@
 }
 
 .mailtoLink {
-  margin-right: 20px;
   cursor: pointer;
   text-decoration: none;
   /* This removes the underline */
   color: rgb(50, 49, 48);
   /* This sets the color */
+  display: flex;
+  align-items: center;
 }
 
 .mailtoLink:hover {
@@ -82,5 +83,5 @@
 .verticalLine {
   height: 24px;
   border-left: 1px solid #797978;
-  margin-right: 20px;
+  margin: 0 20px;
 }

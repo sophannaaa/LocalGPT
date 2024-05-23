@@ -32,19 +32,22 @@ export const Header: React.FC<IHeaderProps> = (p: IHeaderProps) => {
         </h1>
       </Stack>
       <Stack horizontal className={styles.extrasContainer}>
-        <Link
-          href={
-            `mailto:${MR_PPC_EMAIL}` +
-            `?subject=${encodeURIComponent(PREDEFINED_EMAIL_SUBJECT)}` +
-            `&body=${encodeURIComponent(PREDEFINED_EMAIL_BODY_FORMAT)}`
-          }
-          className={styles.mailtoLink}
-          style={{ fontSize: '14px', textDecoration: 'none' }}
-          underline={false}
-        >
-          <Icon iconName="Mail" style={{ paddingTop: '2px', marginRight: '4px' }} />
-          Contact Us
-        </Link>
+        <Stack horizontal className={styles.contactUsStack}>
+          <Link
+            href={
+              `mailto:${MR_PPC_EMAIL}` +
+              `?subject=${encodeURIComponent(PREDEFINED_EMAIL_SUBJECT)}` +
+              `&body=${encodeURIComponent(PREDEFINED_EMAIL_BODY_FORMAT)}`
+            }
+            className={styles.mailtoLink}
+            style={{ fontSize: '14px', textDecoration: 'none' }}
+            underline={false}
+          >
+            <Icon iconName="Mail" style={{ paddingTop: '2px', marginRight: '4px' }} />
+            Contact Us
+          </Link>
+        </Stack>
+
 
         <div className={styles.verticalLine}></div>
 
