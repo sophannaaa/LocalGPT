@@ -1,5 +1,5 @@
 .titleStack,
-.viewPolicyButtonContainerStack {
+.extrasContainer {
   display: flex;
   align-items: center;
   margin-right: 20px;
@@ -45,4 +45,43 @@
   padding: 0px;
   border: transparent;
   background-color: transparent;
+}
+
+.mailtoLink {
+  cursor: pointer;
+  text-decoration: none;
+  /* This removes the underline */
+  color: rgb(50, 49, 48);
+  /* This sets the color */
+  display: flex;
+  align-items: center;
+}
+
+.mailtoLink:hover {
+  color: rgb(50, 49, 48);
+  /* This sets the color on hover */
+  text-decoration: none;
+  /* This removes the underline on hover */
+}
+
+.mailtoLink:active {
+  color: rgb(50, 49, 48);
+  /* This sets the color when active */
+  text-decoration: none;
+  /* This removes the underline when active */
+}
+
+.mailtoLink:visited {
+  color: rgb(50, 49, 48);
+  /* This sets the color when visited */
+  text-decoration: none;
+  /* This removes the underline when visited */
+}
+
+
+
+.verticalLine {
+  height: 24px;
+  border-left: 1px solid #797978;
+  margin: 0 20px;
 }

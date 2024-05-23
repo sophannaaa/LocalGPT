@@ -27,7 +27,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 36px 8px 8px;
+  margin: 8px 8px;
 }
 
 .chatEmptyStateTitle {
@@ -67,7 +67,7 @@
   padding-right: 24px;
   display: flex;
   flex-direction: column;
-  margin-top: 24px;
+  margin-top: 8px;
 }
 
 .chatMessageGpt {
