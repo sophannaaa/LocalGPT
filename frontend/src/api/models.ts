@@ -78,6 +78,11 @@ export type UserInfo = {
   user_id: string
 }
 
+export type UserNameEmail = {
+  user_name: string
+  user_email: string
+}
+
 export enum CosmosDBStatus {
   NOT_CONFIGURED = 'CosmosDB is not configured',
   NOT_WORKING = 'CosmosDB is not working',

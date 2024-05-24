@@ -59,11 +59,15 @@ const Chat = () => {
   const [hideErrorDialog, { toggle: toggleErrorDialog }] = useBoolean(true)
   const [errorMsg, setErrorMsg] = useState<ErrorMessage | null>()
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true)
-  const [userName, setUserName] = useState<string>('user')
-  const [userEmail, setUserEmail] = useState<string>('email')
+//   const [userName, setUserName] = useState<string>('user')
+//   const [userEmail, setUserEmail] = useState<string>('email')
   const [chatTitle, setChatTitle] = useState<string>('Hi!')
   const [showPolicyNotice, setShowPolicyNotice] = useState<boolean>(true);
   const [policyAgreementStatus, setPolicyAgreementStatus] = useState<boolean>(false);
+  
+  const userName = appStateContext?.state.userNameEmail.user_name
+  const userEmail = appStateContext?.state.userNameEmail.user_email
+
 
   const errorDialogContentProps = {
     type: DialogType.close,
@@ -159,7 +163,7 @@ const Chat = () => {
       date: new Date().toISOString()
     }
 
-    if (userName.toLowerCase() != 'dummy' && userEmail.toLowerCase() != 'dummy') {
+    if (userName && userEmail && userName.toLowerCase() != 'dummy' && userEmail.toLowerCase() != 'dummy') {
       userMessage.user_name = userName;
       userMessage.user_email = userEmail;
     }
@@ -448,19 +452,19 @@ const Chat = () => {
     }
   }, [processMessages])
 
-  useEffect(() => {
-    // gets user info and set chat title to display greeting and first name
-    getUserInfo().then(response => {
-      const user_email = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'preferred_username')?.val
-      setUserEmail(user_email)
+//   useEffect(() => {
+//     // gets user info and set chat title to display greeting and first name
+//     getUserInfo().then(response => {
+//       const user_email = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'preferred_username')?.val
+//       setUserEmail(user_email)
 
 
-      const fullName = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val
-      const firstName = fullName.split(' ')[0]
-      setUserName(fullName)
-      setChatTitle(userGreeting + ', ' + firstName + '!') // Hi, First_Name!
-    })
-  }, [])
+//       const fullName = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val
+//       const firstName = fullName.split(' ')[0]
+//       setUserName(fullName)
+//       setChatTitle(userGreeting + ', ' + firstName + '!') // Hi, First_Name!
+//     })
+//   }, [])
 
   useLayoutEffect(() => {
     chatMessageStreamEnd.current?.scrollIntoView({ behavior: 'smooth' })
