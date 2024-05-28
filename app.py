@@ -5,6 +5,7 @@ import logging
 import uuid
 from dotenv import load_dotenv
 
+import jwt
 from quart import (
     Blueprint,
     Quart,
@@ -57,7 +58,8 @@ async def favicon():
 async def assets(path):
     return await send_from_directory("static/assets", path)
 
-
+# Allowed List of People
+ALLOWED_IN_PRIVATE_PREVIEW = set([email.strip() for email in os.getenv('ALLOWED_IN_PRIVATE_PREVIEW').split(',')])
 
 # Debug settings
 DEBUG = os.environ.get("DEBUG", "false")
@@ -962,6 +964,29 @@ async def generate_title(conversation_messages):
         return title
     except Exception as e:
         return messages[-2]['content']
+
+@bp.route('/authorize', methods=['POST'])
+async def decode_token():
+    request_json = await request.get_json()
+    user = request_json.get('user', None)
+    token = request_json.get('token', None)
+
+    if not token:
+        return jsonify({'message': 'Token is required'}), 400
+
+    try:
+        # Decode the token without verification
+        decoded = jwt.decode(token, options={"verify_signature": False})
+        user_email = decoded.get('email', None)
+        preferred_username = decoded.get('preferred_username', None)
+
+        if user_email in ALLOWED_IN_PRIVATE_PREVIEW or preferred_username in ALLOWED_IN_PRIVATE_PREVIEW:
+            return jsonify({'message': 'Access granted'}), 200
+        else:
+            return jsonify({'message': 'Access denied'}), 403
+
+    except jwt.InvalidTokenError:
+        return jsonify({'message': 'Invalid token'}), 400
 
 
 app = create_app()

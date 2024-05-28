@@ -13,7 +13,14 @@ interface Props {
   policyAgreementStatus: boolean
 }
 
-export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conversationId, policyAgreementStatus }: Props) => {
+export const QuestionInput = ({
+  onSend,
+  disabled,
+  placeholder,
+  clearOnSend,
+  conversationId,
+  policyAgreementStatus
+}: Props) => {
   const [question, setQuestion] = useState<string>('')
 
   const sendQuestion = () => {
