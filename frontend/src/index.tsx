@@ -12,7 +12,7 @@ import PrivatePreview from '@pages/PrivatePreview/PrivatePreview'
 import Loading from '@pages/Loading/Loading'
 import { AppStateProvider, AppStateContext, ActionType } from './state/AppProvider'
 import { defineUser } from '@api/api'
-
+        
 initializeIcons()
 
 export default function App() {

@@ -12,6 +12,7 @@ import {
   User,
   defineUser
 } from '@api/index'
+import { ALLOWED_EMAILS } from '@constants/allowedEmails'
 
 export interface AppState {
   isChatHistoryOpen: boolean
@@ -88,9 +89,9 @@ const initialState: AppState = {
 
 export const AppStateContext = createContext<
   | {
-      state: AppState
-      dispatch: React.Dispatch<Action>
-    }
+    state: AppState
+    dispatch: React.Dispatch<Action>
+  }
   | undefined
 >(undefined)
 
@@ -108,7 +109,7 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
         dispatch({ type: ActionType.SET_USER, payload: response })
       }
     })
-
+      
     // Check for cosmosdb config and fetch initial data here
     const fetchChatHistory = async (offset = 0): Promise<Conversation[] | null> => {
       const result = await historyList(offset)

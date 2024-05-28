@@ -65,6 +65,7 @@ const Chat = () => {
   const [policyAgreementStatus, setPolicyAgreementStatus] = useState<boolean>(false)
   const [user, setUser] = useState<User | null>(appStateContext!.state.user)
 
+
   const errorDialogContentProps = {
     type: DialogType.close,
     title: errorMsg?.title,
