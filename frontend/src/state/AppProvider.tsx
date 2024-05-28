@@ -9,8 +9,8 @@ import {
   CosmosDBStatus,
   Feedback,
   FeedbackRating,
-  UserNameEmail,
-  getUserInfo
+  User,
+  defineUser
 } from '@api/index'
 import { ALLOWED_EMAILS } from '@constants/allowedEmails'
 
@@ -25,8 +25,7 @@ export interface AppState {
   messageIdFeedback: { [messageId: string]: Feedback }
   showFeedback: boolean
   currentMessageIdFeedback: string
-  userNameEmail: UserNameEmail
-  isUserInPrivatePreview: boolean
+  user: User | null
 }
 
 export enum ActionType {
@@ -48,8 +47,7 @@ export enum ActionType {
   SET_MESSAGE_FEEDBACK_ERROR = 'SET_MESSAGE_FEEDBACK_ERROR',
   SET_SHOW_FEEDBACK = 'SET_SHOW_FEEDBACK',
   SET_CURRENT_MESSAGE_ID_FEEDBACK = 'SET_CURRENT_MESSAGE_ID_FEEDBACK',
-  SET_USER_NAME_EMAIL = 'SET_USER_NAME_EMAIL',
-  SET_USER_IN_PRIVATE_PREVIEW = 'SET_USER_IN_PRIVATE_PREVIEW'
+  SET_USER = 'SET_USER'
 }
 
 export type Action =
@@ -70,8 +68,7 @@ export type Action =
   | { type: ActionType.REMOVE_MESSAGE_FEEDBACK; payload: string }
   | { type: ActionType.SET_SHOW_FEEDBACK; payload: boolean }
   | { type: ActionType.SET_CURRENT_MESSAGE_ID_FEEDBACK; payload: string }
-  | { type: ActionType.SET_USER_NAME_EMAIL; payload: UserNameEmail }
-  | { type: ActionType.SET_USER_IN_PRIVATE_PREVIEW; payload: boolean }
+  | { type: ActionType.SET_USER; payload: User }
 
 const initialState: AppState = {
   isChatHistoryOpen: false,
@@ -87,8 +84,7 @@ const initialState: AppState = {
   messageIdFeedback: {},
   showFeedback: false,
   currentMessageIdFeedback: '',
-  userNameEmail: { user_name: 'dummy', user_email: 'dummy' },
-  isUserInPrivatePreview: false
+  user: null
 }
 
 export const AppStateContext = createContext<
@@ -107,23 +103,13 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
   const [state, dispatch] = useReducer(appStateReducer, initialState)
 
   useEffect(() => {
-    // authenticate user
-    getUserInfo().then(response => {
-      const user_email = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'preferred_username')?.val
-      const fullName = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val
-      const firstName = fullName.split(' ')[0]
-
-      const userNameEmail: UserNameEmail = { user_name: firstName, user_email: user_email }
-
-      dispatch({ type: ActionType.SET_USER_NAME_EMAIL, payload: userNameEmail })
-
-      if (ALLOWED_EMAILS.has(user_email))
-        dispatch({ type: ActionType.SET_USER_IN_PRIVATE_PREVIEW, payload: true })
-      else
-        dispatch({ type: ActionType.SET_USER_IN_PRIVATE_PREVIEW, payload: false })
+    // initialize user
+    defineUser().then(response => {
+      if (response) {
+        dispatch({ type: ActionType.SET_USER, payload: response })
+      }
     })
-
-
+      
     // Check for cosmosdb config and fetch initial data here
     const fetchChatHistory = async (offset = 0): Promise<Conversation[] | null> => {
       const result = await historyList(offset)

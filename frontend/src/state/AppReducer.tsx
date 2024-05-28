@@ -97,15 +97,10 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
         ...state,
         currentMessageIdFeedback: action.payload
       }
-    case ActionType.SET_USER_NAME_EMAIL:
+    case ActionType.SET_USER:
       return {
         ...state,
-        userNameEmail: action.payload
-      }
-    case ActionType.SET_USER_IN_PRIVATE_PREVIEW:
-      return {
-        ...state,
-        isUserInPrivatePreview: action.payload
+        user: action.payload
       }
     default:
       return state

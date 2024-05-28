@@ -78,9 +78,12 @@ export type UserInfo = {
   user_id: string
 }
 
-export type UserNameEmail = {
-  user_name: string
-  user_email: string
+export type User = {
+  fullname: string
+  firstname: string
+  email: string
+  preferred_username: string
+  allowed_to_chat: boolean
 }
 
 export enum CosmosDBStatus {

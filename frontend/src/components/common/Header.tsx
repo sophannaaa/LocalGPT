@@ -1,62 +1,89 @@
-import { ITextProps, Stack, DefaultButton, Icon, Link } from '@fluentui/react'
+import { ITextProps, Stack, DefaultButton, Icon, Link, on } from '@fluentui/react'
 import React from 'react'
+import MR_LOGO from '@assets/MRLogo.png'
 
 import styles from './Header.module.css'
 
 interface IHeaderProps extends ITextProps {
-  onClick: () => void
-  onViewPolicyClick: () => void
-  title: string
-  imgSrc: string
-  disabled: boolean
+  onClick?: () => void
+  onViewPolicyClick?: () => void
+  titleClickDisabled?: boolean
+  hideViewPolicy?: boolean
+  hideContactUs?: boolean
+  requestAccess?: boolean
 }
 
 const MR_PPC_EMAIL = 'MRPPCtooling@microsoft.com'
-const PREDEFINED_EMAIL_BODY_FORMAT = 'Hello MR PPC Tooling Team,\n\n I am contacting you regarding...'
-const PREDEFINED_EMAIL_SUBJECT = 'PPC Copilot Feedback';
+const FEEDBACK_EMAIL_BODY = 'Hello MR PPC Tooling Team,\n\n I am contacting you regarding...'
+const FEEDBACK_EMAIL_SUBJECT = 'PPC Copilot Feedback'
 
+const ACCESS_EMAIL_BODY =
+  'Hello MR PPC Tooling Team,\n\n I am contacting you regarding acquiring access to the Program Protection and Compliance Copilot. \n\nI would like to request access for: \n\n \tName(s): \n\tEmail(s): '
+const ACCESS_EMAIL_SUBJECT = 'PPC Copilot Access Request'
 
-export const Header: React.FC<IHeaderProps> = (p: IHeaderProps) => {
+const HEADER_TITLE = 'Program Protection and Compliance Copilot'
+
+export const Header: React.FC<IHeaderProps> = (props: IHeaderProps) => {
+  const {
+    onClick = () => { },
+    onViewPolicyClick = () => { },
+    titleClickDisabled = true,
+    hideViewPolicy = false,
+    hideContactUs = false,
+    requestAccess = false
+  } = props
+
   const handleClick = () => {
-    if (!p.disabled) {
-      p.onClick()
+    if (titleClickDisabled) {
+      onClick()
     }
   }
 
+  const emailSubject = requestAccess ? ACCESS_EMAIL_SUBJECT : FEEDBACK_EMAIL_SUBJECT
+  const emailBody = requestAccess ? ACCESS_EMAIL_BODY : FEEDBACK_EMAIL_BODY
+
   return (
     <Stack horizontal className={styles.header} role={'banner'}>
-      <Stack horizontal verticalAlign="center" className={styles.titleStack} style={{ cursor: p.disabled ? 'default' : 'pointer' }}>
-        <img src={p.imgSrc} className={styles.headerIcon} aria-hidden="true" onClick={handleClick} />
+      <Stack
+        horizontal
+        verticalAlign="center"
+        className={styles.titleStack}
+        style={{ cursor: titleClickDisabled ? 'default' : 'pointer' }}>
+        <img src={MR_LOGO} className={styles.headerIcon} aria-hidden="true" onClick={handleClick} />
         <h1 className={styles.headerTitle} onClick={handleClick}>
-          {p.title}
+          {HEADER_TITLE}
         </h1>
       </Stack>
       <Stack horizontal className={styles.extrasContainer}>
-        <Stack horizontal className={styles.contactUsStack}>
-          <Link
-            href={
-              `mailto:${MR_PPC_EMAIL}` +
-              `?subject=${encodeURIComponent(PREDEFINED_EMAIL_SUBJECT)}` +
-              `&body=${encodeURIComponent(PREDEFINED_EMAIL_BODY_FORMAT)}`
-            }
-            className={styles.mailtoLink}
-            style={{ fontSize: '14px', textDecoration: 'none' }}
-            underline={false}
-          >
-            <Icon iconName="Mail" style={{ paddingTop: '2px', marginRight: '4px' }} />
-            Contact Us
-          </Link>
-        </Stack>
+        {!hideContactUs && (
+          <Stack horizontal className={styles.contactUsStack}>
+            <Link
+              href={
+                `mailto:${MR_PPC_EMAIL}` +
+                `?subject=${encodeURIComponent(emailSubject)}` +
+                `&body=${encodeURIComponent(emailBody)}`
+              }
+              className={styles.mailtoLink}
+              style={{ fontSize: '14px', textDecoration: 'none' }}
+              underline={false}>
+              <Icon iconName="Mail" style={{ paddingTop: '2px', marginRight: '4px' }} />
+              Contact Us
+            </Link>
+          </Stack>
+        )}
 
+        {!hideViewPolicy && (
+          <>
+            <div className={styles.verticalLine}></div>
 
-        <div className={styles.verticalLine}></div>
-
-        <Stack horizontal className={styles.viewPolicyButtonStack} verticalAlign='center'>
-          <DefaultButton className={styles.viewPolicyButton} onClick={p.onViewPolicyClick}>
-            <Icon iconName="Info" style={{ paddingTop: '2px', marginRight: '4px' }} />
-            View Policy
-          </DefaultButton>
-        </Stack>
+            <Stack horizontal className={styles.viewPolicyButtonStack} verticalAlign="center">
+              <DefaultButton className={styles.viewPolicyButton} onClick={onViewPolicyClick}>
+                <Icon iconName="Info" style={{ paddingTop: '2px', marginRight: '4px' }} />
+                View Policy
+              </DefaultButton>
+            </Stack>
+          </>
+        )}
       </Stack>
     </Stack>
   )

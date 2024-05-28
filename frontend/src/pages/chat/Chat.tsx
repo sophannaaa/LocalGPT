@@ -24,7 +24,8 @@ import {
   historyUpdate,
   ChatHistoryLoadingState,
   CosmosDBStatus,
-  ErrorMessage
+  ErrorMessage,
+  User
 } from '@api/index'
 import { Answer } from '@components/Answer'
 import { AnswerLoading } from '@components/Answer/AnswerLoading'
@@ -59,14 +60,10 @@ const Chat = () => {
   const [hideErrorDialog, { toggle: toggleErrorDialog }] = useBoolean(true)
   const [errorMsg, setErrorMsg] = useState<ErrorMessage | null>()
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(true)
-//   const [userName, setUserName] = useState<string>('user')
-//   const [userEmail, setUserEmail] = useState<string>('email')
   const [chatTitle, setChatTitle] = useState<string>('Hi!')
-  const [showPolicyNotice, setShowPolicyNotice] = useState<boolean>(true);
-  const [policyAgreementStatus, setPolicyAgreementStatus] = useState<boolean>(false);
-  
-  const userName = appStateContext?.state.userNameEmail.user_name
-  const userEmail = appStateContext?.state.userNameEmail.user_email
+  const [showPolicyNotice, setShowPolicyNotice] = useState<boolean>(true)
+  const [policyAgreementStatus, setPolicyAgreementStatus] = useState<boolean>(false)
+  const [user, setUser] = useState<User | null>(appStateContext!.state.user)
 
 
   const errorDialogContentProps = {
@@ -147,14 +144,11 @@ const Chat = () => {
   }
 
   const makeApiRequestWithCosmosDB = async (question: string, conversationId?: string) => {
-
-
     handleDisclaimerClose()
     setIsLoading(true)
     setShowLoadingMessage(true)
     const abortController = new AbortController()
     abortFuncs.current.unshift(abortController)
-
 
     const userMessage: ChatMessage = {
       id: uuid(),
@@ -163,9 +157,9 @@ const Chat = () => {
       date: new Date().toISOString()
     }
 
-    if (userName && userEmail && userName.toLowerCase() != 'dummy' && userEmail.toLowerCase() != 'dummy') {
-      userMessage.user_name = userName;
-      userMessage.user_email = userEmail;
+    if (user && user.firstname.toLowerCase() != 'dummy' && user.email.toLowerCase() != 'dummy') {
+      userMessage.user_name = user.firstname
+      userMessage.user_email = user.email
     }
 
     //api call params set here (generate)
@@ -452,19 +446,10 @@ const Chat = () => {
     }
   }, [processMessages])
 
-//   useEffect(() => {
-//     // gets user info and set chat title to display greeting and first name
-//     getUserInfo().then(response => {
-//       const user_email = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'preferred_username')?.val
-//       setUserEmail(user_email)
-
-
-//       const fullName = response[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val
-//       const firstName = fullName.split(' ')[0]
-//       setUserName(fullName)
-//       setChatTitle(userGreeting + ', ' + firstName + '!') // Hi, First_Name!
-//     })
-//   }, [])
+  useEffect(() => {
+    setUser(appStateContext!.state.user)
+    setChatTitle(userGreeting + ', ' + user?.firstname + '!') // Hi, First_Name!
+  }, [appStateContext?.state.user])
 
   useLayoutEffect(() => {
     chatMessageStreamEnd.current?.scrollIntoView({ behavior: 'smooth' })
@@ -512,8 +497,16 @@ const Chat = () => {
 
   return (
     <div className={styles.container} role="main">
-      <Header imgSrc={MR_LOGO} title="Program Protection and Compliance Copilot" onClick={newChat} disabled={disabledButton()} onViewPolicyClick={handleViewPolicyNotice} />
-      <PolicyNotice hidden={showPolicyNotice} onDismiss={handlePolicyNoticeDismiss} onAgree={handlePolicyAgreementStatus} />
+      <Header
+        onClick={newChat}
+        titleClickDisabled={disabledButton()}
+        onViewPolicyClick={handleViewPolicyNotice}
+      />
+      <PolicyNotice
+        hidden={showPolicyNotice}
+        onDismiss={handlePolicyNoticeDismiss}
+        onAgree={handlePolicyAgreementStatus}
+      />
       <Stack horizontal className={styles.chatRoot}>
         <div className={styles.chatContainer}>
           {!messages || messages.length < 1 ? (

@@ -5,7 +5,8 @@ import {
   ChatMessage,
   CosmosDBHealth,
   CosmosDBStatus,
-  Feedback
+  Feedback,
+  User
 } from './models'
 import { chatHistorySampleData } from '@constants/chatHistory'
 
@@ -25,25 +26,87 @@ export async function conversationApi(options: ConversationRequest, abortSignal:
 }
 
 export async function getUserInfo(): Promise<UserInfo[]> {
-  const response = await fetch('/.auth/me')
-  if (response.ok) {
+  try {
+    const response = await fetch('/.auth/me')
+    if (!response.ok) {
+      throw new Error(`Authentication error! status: ${response.status}`)
+    }
     const payload = await response.json()
     return payload
-  } else {
+  } catch (error) {
+    console.error(
+      'A problem occurred when trying to authenticate the user. Default user profile will be used to provide limited access.',
+      error
+    )
+    // In case of an error during authentication, we return a default user object which cannot access the Chat.
     return [
       {
         access_token: '',
         expires_on: '',
-        id_token: '',
+        id_token:
+          'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZW1haWwuY29tIiwibmFtZSI6IlVzZXIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ1c2VyQGVtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.nlIqCQbVVnnxcSQqLE-gQHpTD7Feo1gfnKO1KAaTAfbrDmRIuv3F1CMgUAo3vZhLDrYmCzIwpLMY-CUpc7xLAQs2RuYdW2HsrTHe7wu2jg0MbrMvuTl4hHexUMezbXw-l40l8-1RjLhVKiQ4NtA8mDSCi2VxKAQL1lKXLgmOngVfbP02r6tiDo65HMz4EroGdo1D2Ax6uE5OdfJEfKY6NzpDz0DzLtxCqnadSzQF-9sgctXh8I2FP7kAtiOk_hpa0LEjKKqDdWLGn1FQMXX66REKRAN2lIhjec_4hGEd6J7RcKUl51BJhfxaOijFhg3Cov7ytWT3M7nb0EzaJfAq4g',
         provider_name: '',
         user_claims: [
+          {
+            typ: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
+            val: 'sample_user_email_schema@email.com'
+          },
           { typ: 'name', val: 'User' },
-          { typ: 'preferred_username', val: 'user@email.com' },
+          { typ: 'preferred_username', val: 'sample_user_email_preferred@email.com' }
         ],
         user_id: ''
       }
     ]
   }
+}
+
+export async function defineUser(): Promise<User | null> {
+  let user: User = {
+    fullname: '',
+    firstname: '',
+    email: '',
+    preferred_username: '',
+    allowed_to_chat: false
+  }
+
+  getUserInfo().then(async res => {
+    let id_token = res[0].id_token
+
+    let fullName = res[0].user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val || 'User'
+    let firstName = fullName.split(' ')[0] || 'User'
+    let email =
+      res[0]?.user_claims?.find(
+        (e: { typ: string }) => e.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
+      )?.val || 'user@email.com'
+    let preferredUsername =
+      res[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'preferred_username')?.val || 'user@email.com'
+
+    user.fullname = fullName
+    user.firstname = firstName
+    user.email = email
+    user.preferred_username = preferredUsername
+
+    // Call the /decode endpoint with the id_token
+    const response = await fetch('/authorize', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: user,
+        token: id_token
+      })
+    })
+
+    if (response.ok) {
+      user.allowed_to_chat = true
+    } else {
+      console.error('Error decoding id_token. Cannot authorize user for chat.')
+      user.allowed_to_chat = false
+    }
+  })
+
+  return user
 }
 
 // export const fetchChatHistoryInit = async (): Promise<Conversation[] | null> => {

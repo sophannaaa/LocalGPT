@@ -1,10 +1,29 @@
-import React from 'react'
+import { Header } from '@components/common/Header'
+
+import styles from './PrivatePreview.module.css'
 
 export default function PrivatePreview() {
   return (
-    <div>
-      <h1>You are not a part of the private preview</h1>
-      <p>Please contact us to get access.</p>
+    <div className={styles.container} role="main">
+      <Header
+        hideViewPolicy={true}
+        requestAccess={true}
+      />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          flexDirection: 'column'
+        }}>
+        <h1>This service is currently in Private Preview.</h1>
+        <p>
+          You do not have access to the private preview.
+          <br /> <br />
+          If you believe this is a mistake, please hit contact us to request access.
+        </p>
+      </div>
     </div>
   )
 }

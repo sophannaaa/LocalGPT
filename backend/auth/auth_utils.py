@@ -1,3 +1,5 @@
+import jwt
+
 def get_authenticated_user_details(request_headers):
     user_object = {}
 
@@ -18,3 +20,6 @@ def get_authenticated_user_details(request_headers):
     user_object['aad_id_token'] = raw_user_object.get('X-Ms-Token-Aad-Id-Token')
 
     return user_object
+
+def get_token_details(request_headers):
+    return jwt.decode(request_headers, options={"verify_signature": False})
