@@ -34,7 +34,7 @@ export const Header: React.FC<IHeaderProps> = (props: IHeaderProps) => {
   } = props
 
   const handleClick = () => {
-    if (titleClickDisabled) {
+    if (!titleClickDisabled) {
       onClick()
     }
   }

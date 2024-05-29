@@ -59,7 +59,7 @@ async def assets(path):
     return await send_from_directory("static/assets", path)
 
 # Allowed List of People
-ALLOWED_IN_PRIVATE_PREVIEW = set([email.strip() for email in os.getenv('ALLOWED_IN_PRIVATE_PREVIEW').split(',')])
+ALLOWED_IN_PRIVATE_PREVIEW = set([email.strip() for email in os.getenv('ALLOWED_IN_PRIVATE_PREVIEW', '').split(',')])
 
 # Debug settings
 DEBUG = os.environ.get("DEBUG", "false")
