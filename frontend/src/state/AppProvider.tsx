@@ -8,8 +8,11 @@ import {
   historyEnsure,
   CosmosDBStatus,
   Feedback,
-  FeedbackRating
+  FeedbackRating,
+  User,
+  defineUser
 } from '@api/index'
+import { ALLOWED_EMAILS } from '@constants/allowedEmails'
 
 export interface AppState {
   isChatHistoryOpen: boolean
@@ -22,6 +25,7 @@ export interface AppState {
   messageIdFeedback: { [messageId: string]: Feedback }
   showFeedback: boolean
   currentMessageIdFeedback: string
+  user: User | null
 }
 
 export enum ActionType {
@@ -42,7 +46,8 @@ export enum ActionType {
   REMOVE_MESSAGE_FEEDBACK = 'REMOVE_MESSAGE_FEEDBACK',
   SET_MESSAGE_FEEDBACK_ERROR = 'SET_MESSAGE_FEEDBACK_ERROR',
   SET_SHOW_FEEDBACK = 'SET_SHOW_FEEDBACK',
-  SET_CURRENT_MESSAGE_ID_FEEDBACK = 'SET_CURRENT_MESSAGE_ID_FEEDBACK'
+  SET_CURRENT_MESSAGE_ID_FEEDBACK = 'SET_CURRENT_MESSAGE_ID_FEEDBACK',
+  SET_USER = 'SET_USER'
 }
 
 export type Action =
@@ -63,6 +68,7 @@ export type Action =
   | { type: ActionType.REMOVE_MESSAGE_FEEDBACK; payload: string }
   | { type: ActionType.SET_SHOW_FEEDBACK; payload: boolean }
   | { type: ActionType.SET_CURRENT_MESSAGE_ID_FEEDBACK; payload: string }
+  | { type: ActionType.SET_USER; payload: User }
 
 const initialState: AppState = {
   isChatHistoryOpen: false,
@@ -77,14 +83,15 @@ const initialState: AppState = {
   feedbackState: {},
   messageIdFeedback: {},
   showFeedback: false,
-  currentMessageIdFeedback: ''
+  currentMessageIdFeedback: '',
+  user: null
 }
 
 export const AppStateContext = createContext<
   | {
-      state: AppState
-      dispatch: React.Dispatch<Action>
-    }
+    state: AppState
+    dispatch: React.Dispatch<Action>
+  }
   | undefined
 >(undefined)
 
@@ -96,6 +103,13 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
   const [state, dispatch] = useReducer(appStateReducer, initialState)
 
   useEffect(() => {
+    // initialize user
+    defineUser().then(response => {
+      if (response) {
+        dispatch({ type: ActionType.SET_USER, payload: response })
+      }
+    })
+      
     // Check for cosmosdb config and fetch initial data here
     const fetchChatHistory = async (offset = 0): Promise<Conversation[] | null> => {
       const result = await historyList(offset)

@@ -97,6 +97,11 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
         ...state,
         currentMessageIdFeedback: action.payload
       }
+    case ActionType.SET_USER:
+      return {
+        ...state,
+        user: action.payload
+      }
     default:
       return state
   }

@@ -1,0 +1,6 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(108.78% 108.78% at 50.02% 19.78%, #ffffff 57.29%, #eef6fe 100%);
+}
