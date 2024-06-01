@@ -43,7 +43,7 @@
 }
 
 .questionInputSendButtonDisabled {
-  /* opacity: 0.4; */
+  opacity: 0.5;
   width: 24px;
   height: 23px;
   background: none;
@@ -56,12 +56,10 @@
   height: 4px;
   left: 0%;
   bottom: 0%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(245, 166, 200, 1) 0%,
-    rgba(171, 78, 157, 1) 46%,
-    rgba(116, 88, 166, 1) 100%
-  );
+  background: radial-gradient(circle at 50% 50%,
+      rgba(245, 166, 200, 1) 0%,
+      rgba(171, 78, 157, 1) 46%,
+      rgba(116, 88, 166, 1) 100%);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }

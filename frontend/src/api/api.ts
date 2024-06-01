@@ -8,7 +8,6 @@ import {
   Feedback,
   User
 } from './models'
-import { chatHistorySampleData } from '@constants/chatHistory'
 
 export async function conversationApi(options: ConversationRequest, abortSignal: AbortSignal): Promise<Response> {
   const response = await fetch('/conversation', {
@@ -110,52 +109,7 @@ export async function defineUser(): Promise<User | null> {
     // Handle error or return a default user object
   }
 
-  // getUserInfo().then(async res => {
-  //   let id_token = res[0].id_token
-
-  //   let fullName = res[0].user_claims?.find((e: { typ: string }) => e.typ === 'name')?.val || 'User'
-  //   let firstName = fullName.split(' ')[0] || 'User'
-  //   let email =
-  //     res[0]?.user_claims?.find(
-  //       (e: { typ: string }) => e.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
-  //     )?.val || 'user@email.com'
-  //   let preferredUsername =
-  //     res[0]?.user_claims?.find((e: { typ: string }) => e.typ === 'preferred_username')?.val || 'user@email.com'
-
-  //   user.fullname = fullName
-  //   user.firstname = firstName
-  //   user.email = email
-  //   user.preferred_username = preferredUsername
-
-  //   // Call the /decode endpoint with the id_token
-  //   const response = await fetch('/authorize', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       user: user,
-  //       token: id_token
-  //     })
-  //   })
-
-  //   if (response.ok) {
-  //     user.allowed_to_chat = true
-  //   } else {
-  //     console.error('Error decoding id_token. Cannot authorize user for chat.')
-  //     user.allowed_to_chat = false
-  //   }
-  // })
-
   return user
-}
-
-// export const fetchChatHistoryInit = async (): Promise<Conversation[] | null> => {
-export const fetchChatHistoryInit = (): Conversation[] | null => {
-  // Make initial API call here
-
-  // return null;
-  return chatHistorySampleData
 }
 
 export const historyList = async (offset = 0): Promise<Conversation[] | null> => {

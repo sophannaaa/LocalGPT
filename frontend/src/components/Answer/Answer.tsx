@@ -9,6 +9,7 @@ import GPT_AVATAR from '@assets/MR-GPTAvatar.svg'
 
 import { AskResponse, Citation } from '@api/index'
 import { parseAnswer } from './AnswerParser'
+import ReferenceButton from './ReferenceButton'
 
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -17,13 +18,10 @@ import { XSSAllowTags } from '@constants/xssAllowTags'
 
 interface Props {
   answer: AskResponse
-  onCitationClicked: (citedDocument: Citation) => void
-  isAnswerGenerating: boolean
 }
 
-export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props) => {
+export const Answer = ({ answer }: Props) => {
   const [isRefAccordionOpen, { toggle: toggleIsRefAccordionOpen }] = useBoolean(false)
-  const filePathTruncationLimit = 50
 
   const parsedAnswer = useMemo(() => parseAnswer(answer), [answer])
   const [chevronIsExpanded, setChevronIsExpanded] = useState(isRefAccordionOpen)
@@ -37,36 +35,6 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
   useEffect(() => {
     setChevronIsExpanded(isRefAccordionOpen)
   }, [isRefAccordionOpen])
-
-  // const createCitationFilepath = (citation: Citation, index: number, truncate: boolean = false) => {
-  //   let citationFilename = ''
-
-  //   if (citation.filepath) {
-  //     const part_i = citation.part_index ?? (citation.chunk_id ? parseInt(citation.chunk_id) + 1 : '')
-  //     if (truncate && citation.filepath.length > filePathTruncationLimit) {
-  //       const citationLength = citation.filepath.length
-  //       citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)} - Part ${part_i}`
-  //     } else {
-  //       citationFilename = `${citation.filepath} - Part ${part_i}`
-  //     }
-  //   } else if (citation.filepath && citation.reindex_id) {
-  //     citationFilename = `${citation.filepath} - Part ${citation.reindex_id}`
-  //   } else {
-  //     citationFilename = `Citation ${index}`
-  //   }
-  //   return citationFilename
-  // }
-
-  function determineTitle(citation: Citation): string {
-    const match = citation.title.match(/^Hide-/)
-    if (match && match[0] === 'Hide-') {
-      citation.url = 'https://delawarewiki.com/'
-      citation.filepath = 'Delaware Wiki'
-      citation.title = 'Delaware Wiki'
-    }
-
-    return citation.title
-  }
 
   return (
     <>
@@ -129,27 +97,15 @@ export const Answer = ({ answer, onCitationClicked, isAnswerGenerating }: Props)
           <div style={{ marginTop: 8, display: 'flex', flexFlow: 'wrap column', gap: '4px' }}>
             {Object.entries(parsedAnswer.citations).map(([url, citationsContainer]) => {
               const referenceNumber = citationsContainer.referenceNumber
-              const citation = citationsContainer.citations[0] // just get first citation since it contains url
-              const citationTitle = determineTitle(citation)
+              const citation = citationsContainer.citations[0]
               return (
-                <span
-                  title={citationTitle}
-                  tabIndex={0}
-                  role="link"
-                  key={referenceNumber}
-                  onClick={() => onCitationClicked(citation)}
-                  onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? onCitationClicked(citation) : null)}
-                  className={styles.citationContainer}
-                  aria-label={citation.title}>
-                  <div className={styles.citation}>{citationsContainer.referenceNumber}</div>
-                  {citation.title}
-                </span>
+                <ReferenceButton key={citation.id} citation={citation} referenceNumber={referenceNumber} />
               )
             })}
           </div>
         )}
         <Stack className={styles.feedback}>
-          {!isAnswerGenerating && <FeedbackButton messageId={answer.message_id!} />}
+          <FeedbackButton messageId={answer.message_id!} />
         </Stack>
       </Stack>
     </>

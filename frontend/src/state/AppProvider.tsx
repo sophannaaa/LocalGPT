@@ -12,7 +12,6 @@ import {
   User,
   defineUser
 } from '@api/index'
-import { ALLOWED_EMAILS } from '@constants/allowedEmails'
 
 export interface AppState {
   isChatHistoryOpen: boolean
@@ -29,19 +28,11 @@ export interface AppState {
 }
 
 export enum ActionType {
-  TOGGLE_CHAT_HISTORY = 'TOGGLE_CHAT_HISTORY',
   SET_COSMOSDB_STATUS = 'SET_COSMOSDB_STATUS',
   UPDATE_CHAT_HISTORY_LOADING_STATE = 'UPDATE_CHAT_HISTORY_LOADING_STATE',
   UPDATE_CURRENT_CHAT = 'UPDATE_CURRENT_CHAT',
-  UPDATE_FILTERED_CHAT_HISTORY = 'UPDATE_FILTERED_CHAT_HISTORY',
   UPDATE_CHAT_HISTORY = 'UPDATE_CHAT_HISTORY',
-  UPDATE_CHAT_TITLE = 'UPDATE_CHAT_TITLE',
-  DELETE_CHAT_ENTRY = 'DELETE_CHAT_ENTRY',
-  DELETE_CHAT_HISTORY = 'DELETE_CHAT_HISTORY',
-  DELETE_CURRENT_CHAT_MESSAGES = 'DELETE_CURRENT_CHAT_MESSAGES',
   FETCH_CHAT_HISTORY = 'FETCH_CHAT_HISTORY',
-  SET_FEEDBACK_STATE = 'SET_FEEDBACK_STATE',
-  GET_FEEDBACK_STATE = 'GET_FEEDBACK_STATE',
   SET_MESSAGE_FEEDBACK = 'SET_MESSAGE_FEEDBACK',
   REMOVE_MESSAGE_FEEDBACK = 'REMOVE_MESSAGE_FEEDBACK',
   SET_MESSAGE_FEEDBACK_ERROR = 'SET_MESSAGE_FEEDBACK_ERROR',
@@ -109,7 +100,7 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
         dispatch({ type: ActionType.SET_USER, payload: response })
       }
     })
-      
+
     // Check for cosmosdb config and fetch initial data here
     const fetchChatHistory = async (offset = 0): Promise<Conversation[] | null> => {
       const result = await historyList(offset)
