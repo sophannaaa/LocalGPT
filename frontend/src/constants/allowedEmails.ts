@@ -1,1 +1,0 @@
-export const ALLOWED_EMAILS = new Set (['v-soptav@microsoft.com', 'user@email.com'])
