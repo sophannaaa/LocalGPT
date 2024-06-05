@@ -2,12 +2,14 @@ import * as React from 'react'
 import { Stack, IIconProps, Callout, DelayedRender, Text, DirectionalHint } from '@fluentui/react'
 import { DefaultButton, IButtonStyles } from '@fluentui/react/lib/Button'
 
-import { historyMessageFeedback, Feedback, FeedbackBody, FeedbackRating } from '@api/index'
-import { useBoolean, useId } from '@fluentui/react-hooks'
+import { historyMessageFeedback, FeedbackBody, FeedbackRating } from '@api/index'
+import { useId } from '@fluentui/react-hooks'
 import { useState, useEffect, useContext } from 'react'
 import { AppStateContext, ActionType } from '@state/AppProvider'
 
 import styles from './FeedbackButton.module.css'
+import EASTER_EGG_DISLIKE from '@assets/Easter-Egg-Dislike.svg'
+import EASTER_EGG_LIKE from '@assets/Easter-Egg-Like.svg'
 
 export interface IFeedbackButtonProps {
   messageId: string
@@ -47,6 +49,9 @@ const buttonStyles: IButtonStyles = {
   }
 }
 
+const FEEDBACK_THANK_MESSAGE = 'Thank you! Your feedback will help us improve our system.'
+const FEEDBACK_RESCINDED_MESSAGE = 'Feedback was rescinded.'
+
 export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackButtonProps) => {
   const { messageId: message_id, disabled } = props
 
@@ -62,9 +67,14 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
     useState<boolean>(false)
   const [isLikeSubmitted, setIsLikeSubmitted] = useState<boolean>(false)
   const [isDislikeSubmitted, setIsDislikeSubmitted] = useState<boolean>(false)
+  const [isEasterEggVisible, setIsEasterEggVisible] = useState<boolean>(false);
 
   const buttonIdLike = useId('callout-button-like')
   const buttonIdDislike = useId('callout-button-dislike')
+
+  useEffect(() => {
+    setIsEasterEggVisible(Math.random() < 0.001);
+  }, []);
 
   useEffect(() => {
     setIsLikeSubmitted(feedback?.rating === FeedbackRating.POSITIVE)
@@ -77,11 +87,13 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
   }, [isNegativeFeedbackCalloutVisible])
 
   const handleLikeClick = () => {
-    isLikeSubmitted ? handleSendNeutralFeedback(true) : handleSendPositiveFeedback()
+    if (!isRefreshing) {
+      isLikeSubmitted ? handleSendNeutralFeedback(true) : handleSendPositiveFeedback()
 
-    // user clicks like after having submitted dislike
-    if (isDislikeSubmitted && !isLikeSubmitted) {
-      handleSendPositiveFeedback()
+      // user clicks like after having submitted dislike
+      if (isDislikeSubmitted && !isLikeSubmitted) {
+        handleSendPositiveFeedback()
+      }
     }
   }
 
@@ -144,7 +156,7 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
           styles={buttonStyles}
           style={{ cursor: isRefreshing ? 'not-allowed' : 'pointer' }}
           checked={isLikeSubmitted}
-          onClick={() => !isRefreshing && handleLikeClick()}
+          onClick={handleLikeClick}
           allowDisabledFocus
           disabled={isRefreshing}
         />
@@ -153,13 +165,17 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
           !isNegativeFeedbackCalloutVisible &&
           !isNegativeFeedbackRescindedCalloutVisible && (
             <Callout
-              className={styles.callout}
+              className={isEasterEggVisible ? styles.calloutImage : styles.calloutText}
               target={`#${buttonIdLike}`}
               onDismiss={() => setIsPositiveFeedbackCalloutVisible(false)}
               role="alert"
               directionalHint={DirectionalHint.bottomCenter}>
               <DelayedRender>
-                <Text variant="small">Thank you! Your feedback will help us improve our system.</Text>
+                {isEasterEggVisible ? (
+                  <img src={EASTER_EGG_LIKE} alt="Easter Egg" className={styles.easterEggImages} />
+                ) : (
+                  <Text variant="small">{FEEDBACK_THANK_MESSAGE}</Text>
+                )}
               </DelayedRender>
             </Callout>
           )}
@@ -168,13 +184,13 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
           !isNegativeFeedbackCalloutVisible &&
           !isNegativeFeedbackRescindedCalloutVisible && (
             <Callout
-              className={styles.callout}
+              className={styles.calloutText}
               target={`#${buttonIdLike}`}
               onDismiss={() => setIsPositiveFeedbackRescindedCalloutVisible(false)}
               role="alert"
               directionalHint={DirectionalHint.bottomCenter}>
               <DelayedRender>
-                <Text variant="small">Feedback was rescinded.</Text>
+                <Text variant="small">{FEEDBACK_RESCINDED_MESSAGE}</Text>
               </DelayedRender>
             </Callout>
           )}
@@ -184,7 +200,7 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
           toggle
           text={'Unhelpful'}
           iconProps={DislikeIcon}
-          onClick={() => !isRefreshing && handleDislikeClick()}
+          onClick={handleDislikeClick}
           id={buttonIdDislike}
           allowDisabledFocus
           checked={isDislikeSubmitted}
@@ -197,13 +213,17 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
           !isPositiveFeedbackCalloutVisible &&
           !isPositiveFeedbackRescindedCalloutVisible && (
             <Callout
-              className={styles.callout}
+              className={isEasterEggVisible ? styles.calloutImage : styles.calloutText}
               target={`#${buttonIdDislike}`}
               onDismiss={() => setIsNegativeFeedbackCalloutVisible(false)}
               role="alert"
               directionalHint={DirectionalHint.bottomCenter}>
               <DelayedRender>
-                <Text variant="small">Thank you! Your feedback will help us improve our system.</Text>
+                {isEasterEggVisible ? (
+                  <img src={EASTER_EGG_DISLIKE} alt="Easter Egg" className={styles.easterEggImages} />
+                ) : (
+                  <Text variant="small">{FEEDBACK_THANK_MESSAGE}</Text>
+                )}
               </DelayedRender>
             </Callout>
           )}
@@ -212,13 +232,13 @@ export const FeedbackButton: React.FC<IFeedbackButtonProps> = (props: IFeedbackB
           !isPositiveFeedbackCalloutVisible &&
           !isPositiveFeedbackRescindedCalloutVisible && (
             <Callout
-              className={styles.callout}
+              className={styles.calloutText}
               target={`#${buttonIdDislike}`}
               onDismiss={() => setIsNegativeFeedbackRescindedCalloutVisible(false)}
               role="alert"
               directionalHint={DirectionalHint.bottomCenter}>
               <DelayedRender>
-                <Text variant="small">Feedback was rescinded.</Text>
+                <Text variant="small">{FEEDBACK_RESCINDED_MESSAGE}</Text>
               </DelayedRender>
             </Callout>
           )}

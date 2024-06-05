@@ -1,0 +1,61 @@
+.referenceButtonContainer {
+    margin-left: 10px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    color: #115ea3;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+}
+
+.referenceNumberContainer {
+    background-color: #efefef;
+    padding: 5px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+}
+
+.referenceTitleContainer {
+    flex-grow: 1;
+}
+
+.referenceCopyContainer {
+    background-color: #efefef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 4px 4px 0;
+}
+
+.title {
+    color: #115ea3;
+    text-decoration: none;
+}
+
+.title:hover {
+    text-decoration: underline;
+    background-color: #efefef;
+}
+
+.title:link,
+.title:visited,
+.title:focus,
+.title:active {
+    color: #115ea3;
+}
+
+.copyIconButton {
+    color: #424242;
+}
+
+.copyIconButton:hover {
+    color: #d1d1d1;
+}

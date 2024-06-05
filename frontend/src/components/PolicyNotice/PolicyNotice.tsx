@@ -83,21 +83,6 @@ export const PolicyNotice: React.FC<IPolicyNotice> = (props: IPolicyNotice) => {
             target={linkToCUIPolicy}>
             Mixed Reality CUI Policy.
           </Link>
-          {/* Please review the
-                    <Link
-                        onClick={handleLinkClick}
-                        style={{ textDecoration: 'underline' }}
-                        href={linkToCUIPolicy}
-                        target={linkToCUIPolicy}>
-                        CUI Policy.
-                    </Link>
-
-                    <br />
-                    This is not an approved environment to transmit CUI data.
-                    Come back to this webpage after having reviewed the policy.
-                    <br />
-                    You will not be able to proceed forward or input any questions until you agree.
-                    <br /> */}
         </p>
 
         <Stack horizontalAlign="stretch">

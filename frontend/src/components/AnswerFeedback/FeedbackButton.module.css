@@ -3,6 +3,20 @@
   gap: 8px;
 }
 
-.callout {
+.easterEggImages {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 30%;
+}
+
+.calloutImage {
+  border-radius: 30%;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden;
+}
+
+.calloutText {
   padding: 5px 10px;
 }
